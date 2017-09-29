@@ -5,11 +5,26 @@
         "radar/adr": "~1.0",
         "relay/middleware": "~1.0",
         "josegonzalez/dotenv": "~2.0",
-        "zendframework/zend-diactoros": "~1.0"
+        "zendframework/zend-diactoros": "~1.0", 
+        "tyam/fadoc": "dev-master", 
+        "tyam/edicue": "dev-master", 
+        "monolog/monolog": "*"
     },
     "require-dev": {
-        "pds/skeleton": "~1.0"
+        "pds/skeleton": "~1.0", 
+        "phpunit/phpunit": "^6.0", 
+        "mockery/mockery": "*"
     },
+    "repositories": [
+        {
+            "type": "vcs", 
+            "url": "https://github.com/tyam/fadoc"
+        }, 
+        {
+            "type": "vcs", 
+            "url": "https://github.com/tyam/edicue"
+        }
+    ], 
     "autoload": {
         "psr-4": {
             "": "src/"
