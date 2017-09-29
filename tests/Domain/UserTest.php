@@ -16,6 +16,6 @@ class UserTest extends TestCase
     {
         $user = User::register([$this, 'generateId']);
         $this->assertEquals($user->getUserId()->getValue(), '1');
-        $this->assertEquals($user->getDisplayName(), '新規ユーザー');
+        $this->assertEquals($user->getDisplayName(), '新規ユーザー'); 
     }
 }
