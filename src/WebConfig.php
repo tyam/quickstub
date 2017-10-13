@@ -17,6 +17,11 @@ class WebConfig extends ContainerConfig
         
         // setup RunDomain trait
         $di->setters['Custom\RunDomain']['setResolve'] = $di->lazyNew('Aura\Di\ResolutionHelper');
+
+        // setup template engine
+        $di->params['tyam\bamboo\Engine'][0] = [__DIR__ . DIRECTORY_SEPARATOR . 'Web' . DIRECTORY_SEPARATOR . 'templates'];
+        $di->params['tyam\bamboo\Engine'][1] = null;
+        $di->params['Web\AbstractResponder'][0] = $di->lazyNew('tyam\bamboo\Engine');
     }
     
     public function modify(Container $di)
@@ -30,6 +35,7 @@ class WebConfig extends ContainerConfig
         $adr->middle(new ExceptionHandler(new Response()));
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
         $adr->middle('Radar\Adr\Handler\ActionHandler');
+
         $adr->input('Custom\Input');
 
         // routes

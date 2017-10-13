@@ -14,7 +14,7 @@ trait RunDomain
     public function runDomain($spec, $args) 
     {
         $domain = $this->resolve($spec);
-        $payload = call_user_func_array($domain, $args);
-        return $payload;
+        $result = call_user_func_array($domain, $args);
+        return $result;
     }
 }

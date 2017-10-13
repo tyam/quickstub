@@ -8,6 +8,7 @@
         "zendframework/zend-diactoros": "~1.0", 
         "tyam/fadoc": "dev-master", 
         "tyam/edicue": "dev-master", 
+        "tyam/bamboo": "dev-master", 
         "monolog/monolog": "*"
     },
     "require-dev": {
@@ -23,6 +24,10 @@
         {
             "type": "vcs", 
             "url": "https://github.com/tyam/edicue"
+        }, 
+        {
+            "type": "vcs", 
+            "url": "https://github.com/tyam/bamboo"
         }
     ], 
     "autoload": {

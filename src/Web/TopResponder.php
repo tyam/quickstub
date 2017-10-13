@@ -6,8 +6,9 @@ use Aura\Payload_Interface\PayloadStatus;
 use Aura\Payload_Interface\PayloadInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Custom\View;
 
-class TopResponder 
+class TopResponder extends AbstractResponder
 {
     use \Custom\RunDomain;
     
@@ -16,15 +17,7 @@ class TopResponder
         // \Domain\App::debug('abc');
         //phpinfo();exit;
         $output = $response->getBody();
-        $output->write($this->getContent());
+        $output->write($this->bamboo->render('top', []));
         return $response;
-    }
-    protected function getContent() 
-    {
-        return <<<EOS
-<form method="POST" action="/user">
-<button type="submit">登録</button>
-</form>
-EOS;
     }
 }

@@ -29,7 +29,6 @@ class Config extends ContainerConfig
         // dispatcher
         $di->params['Aura\Di\ResolutionHelper']['container'] = $di;
         $di->params['tyam\edicue\Dispatcher'][0] = $di->lazyNew('Aura\Di\ResolutionHelper');
-        //$di->params['tyam\edicue\Dispatcher'][0] = null;
         $di->params['tyam\edicue\Dispatcher'][1] = null;
         $di->params['tyam\edicue\Dispatcher'][2] = [
             // add listeners here.
