@@ -8,9 +8,9 @@ class Input
 {
     public function __invoke(ServerRequestInterface $request)
     {
-        // collect args (path0, path1, $form)
+        // collect args (path0, path1, ..., $form)
         $args = array_values($request->getAttributes());
-        switch (strtoupper($this->detectMethod($request))) {
+        switch (strtoupper($request->getMethod())) {
             case 'HEAD': 
             case 'GET': 
             case 'DELETE': 
@@ -23,19 +23,5 @@ class Input
                 break;
         }
         return $args;
-    }
-
-    protected function detectMethod(ServerRequestInterface $request)
-    {
-        if ($request->hasHeader('X-METHOD')) {
-            return $request->getHeader('X-METHOD');
-        }
-
-        $post = $request->getParsedBody();
-        if (isset($post['__METHOD'])) {
-            return $post['__METHOD'];
-        }
-
-        return $request->getMethod();
     }
 }

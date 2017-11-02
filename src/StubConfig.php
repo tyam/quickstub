@@ -2,28 +2,12 @@
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
-use Relay\Middleware\ExceptionHandler;
-use Relay\Middleware\ResponseSender;
-use Relay\Middleware\SessionHeadersHandler;
-use Relay\Middleware\JsonContentHandler;
-use Zend\Diactoros\Response as Response;
 
-class WebConfig extends ContainerConfig
+class StubConfig extends ContainerConfig
 {
+    
     public function define(Container $di)
     {
-        // set project-specific router to customise responder auto-resolution.
-        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Custom\Route');
-        
-        // setup RunDomain trait
-        $di->setters['Custom\RunDomain']['setResolve'] = $di->lazyNew('Aura\Di\ResolutionHelper');
-
-        // setup template engine
-        $di->params['tyam\bamboo\Engine'][0] = [__DIR__ . DIRECTORY_SEPARATOR . 'Web' . DIRECTORY_SEPARATOR . 'templates'];
-        $di->params['tyam\bamboo\Engine'][1] = null;
-
-        $di->params['Web\AbstractResponder'][0] = $di->lazyNew('tyam\bamboo\Engine');
-        $di->params['Web\AbstractResponder'][1] = $di->lazyGet('session');
     }
     
     public function modify(Container $di)
@@ -33,7 +17,6 @@ class WebConfig extends ContainerConfig
         // middlewares
         $adr->middle(new ResponseSender());
         $adr->middle(new SessionHeadersHandler());
-        $adr->middle(new Custom\XMethodHandler());
         $adr->middle(new JsonContentHandler());
         $adr->middle(new ExceptionHandler(new Response()));
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
@@ -58,5 +41,6 @@ class WebConfig extends ContainerConfig
         $adr->delete('StubRemoval',   $base.'/{stub}',        'Link\StubRemoval');
         $adr->get(   'AccessRef',     $base.'/access',        'Link\AccessRef');
         $adr->get(   'StubAccessRef', $base.'/{stub}/access', 'Link\StubAccessRef');
+        $adr->any(   'StubExec',      ANY,                    'Link\StubExec');
     }
 }

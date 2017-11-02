@@ -17,9 +17,13 @@ class User
         $this->created = ($created) ? $created : new Datetime();
     }
 
-    public static function register(Callable $generateId, string $displayName = '新規ユーザー')
+    public static function register(Callable $generateId, string $displayName = '新規ユーザー', bool $doLogin = false)
     {
-        return new User($generateId(), $displayName);
+        $user = new User($generateId(), $displayName);
+        if ($doLogin) {
+            App::setCurrentUser($user->getUserId());
+        }
+        return $user;
     }
 
     public function getUserId(): UserId 

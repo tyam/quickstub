@@ -63,7 +63,36 @@ DELIMITER ;
 
 CREATE TABLE user (
     userId BIGINT NOT NULL PRIMARY KEY, 
-    displayName varchar(50) NOT NULL, 
+    displayName VARCHAR(50) NOT NULL, 
     created DATETIME NOT NULL
 );
 INSERT INTO sequence VALUES ('userId', 121, 1);
+
+CREATE TABLE stub (
+    stubId BIGINT NOT NULL PRIMARY KEY, 
+    ownerId BIGINT NOT NULL, 
+    methods INTEGER NOT NULL, 
+    `path` VARCHAR(100) NOT NULL, 
+    statusCode INTEGER NOT NULL, 
+    header TEXT NOT NULL, 
+    body TEXT NOT NULL
+);
+INSERT INTO sequence VALUES ('stubId', 532, 1);
+
+CREATE TABLE stubOrdering (
+    userId BIGINT NOT NULL, 
+    ord INTEGER NOT NULL, 
+    stubId BIGINT NOT NULL, 
+    PRIMARY KEY (userId, ord)
+);
+
+CREATE TABLE access (
+    accessNo BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    stubId BIGINT NOT NULL, 
+    ownerId BIGINT NOT NULL, 
+    request TEXT NOT NULL, 
+    response TEXT NOT NULL, 
+    accessed DATETIME NOT NULL, 
+    INDEX byOwner (ownerId, accessed DESC), 
+    INDEX byStub (stubId, accessed DESC)
+)

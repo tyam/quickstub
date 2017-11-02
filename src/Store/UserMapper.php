@@ -20,7 +20,7 @@ class UserMapper implements UserRepository
     {
         $sql = "SELECT nextval('userId') AS userId";
         $stt = $this->pdo->query($sql);
-        $userId = $stt->fetchColumn().'';
+        $userId = $stt->fetchColumn();
         return new UserId($userId);
     }
 
@@ -46,15 +46,15 @@ class UserMapper implements UserRepository
     private function toRecord(User $user)
     {
         return [
-            userId => $user->getUserId()->getValue(), 
-            displayName => $user->getDisplayName(), 
-            created => $user->getCreated()->format('Y-m-d H:i:s')
+            'userId' => $user->getUserId()->getValue(), 
+            'displayName' => $user->getDisplayName(), 
+            'created' => $user->getCreated()->format('Y-m-d H:i:s')
         ];
     }
 
     private function fromRecord($user)
     {
-        $userId = new UserId($user['userId'].'');
+        $userId = new UserId($user['userId']);
         $displayName = $user['displayName'];
         $created = new Datetime($user['created']);
         return new User($userId, $displayName, $created);

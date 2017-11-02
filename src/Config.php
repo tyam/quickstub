@@ -15,9 +15,9 @@ class Config extends ContainerConfig
         // Application infrastructure
         // ---------------------------------------------------------
         // app
-        $di->params['Custom\App'][0] = $di->lazyGet('logger');
-        $di->params['Custom\App'][1] = $di->lazyNew('tyam\edicue\Dispatcher');
-        $di->params['Custom\App'][2] = $di->lazyGet('session');
+        $di->params['Domain\App'][0] = $di->lazyGet('logger');
+        $di->params['Domain\App'][1] = $di->lazyNew('tyam\edicue\Dispatcher');
+        $di->params['Domain\App'][2] = $di->lazyGet('session');
 
         // logger
         $di->set('logger', $di->lazyNew('Monolog\Logger'));
@@ -56,7 +56,7 @@ class Config extends ContainerConfig
         $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
 
         // instantiate App to make the singleton.
-        $di->newInstance('Custom\App');
-        class_alias('Custom\App', 'App');
+        $di->newInstance('Domain\App');
+        class_alias('Domain\App', 'App');
     }
 }
