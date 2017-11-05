@@ -1,6 +1,6 @@
 <?php
 
-namespace Custom;
+namespace Web;
 
 use Radar\Adr\Route as BaseRoute;
 

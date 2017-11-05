@@ -19,7 +19,7 @@ class XMethodHandler
     protected function detectMethod(Request $request)
     {
         if ($request->hasHeader('X-METHOD')) {
-            return $request->getHeader('X-METHOD');
+            return $request->getHeader('X-METHOD')[0];
         }
 
         $post = $request->getParsedBody();

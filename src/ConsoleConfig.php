@@ -8,22 +8,15 @@ use Relay\Middleware\SessionHeadersHandler;
 use Relay\Middleware\JsonContentHandler;
 use Zend\Diactoros\Response as Response;
 
-class WebConfig extends ContainerConfig
+class ConsoleConfig extends ContainerConfig
 {
     public function define(Container $di)
     {
         // set project-specific router to customise responder auto-resolution.
-        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Custom\Route');
+        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Web\Route');
         
         // setup RunDomain trait
-        $di->setters['Custom\RunDomain']['setResolve'] = $di->lazyNew('Aura\Di\ResolutionHelper');
-
-        // setup template engine
-        $di->params['tyam\bamboo\Engine'][0] = [__DIR__ . DIRECTORY_SEPARATOR . 'Web' . DIRECTORY_SEPARATOR . 'templates'];
-        $di->params['tyam\bamboo\Engine'][1] = null;
-
-        $di->params['Web\AbstractResponder'][0] = $di->lazyNew('tyam\bamboo\Engine');
-        $di->params['Web\AbstractResponder'][1] = $di->lazyGet('session');
+        $di->setters['Web\RunDomain']['setResolve'] = $di->lazyNew('Aura\Di\ResolutionHelper');
     }
     
     public function modify(Container $di)
@@ -33,13 +26,13 @@ class WebConfig extends ContainerConfig
         // middlewares
         $adr->middle(new ResponseSender());
         $adr->middle(new SessionHeadersHandler());
-        $adr->middle(new Custom\XMethodHandler());
         $adr->middle(new JsonContentHandler());
         $adr->middle(new ExceptionHandler(new Response()));
+        $adr->middle('Web\XMethodHandler');
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
         $adr->middle('Radar\Adr\Handler\ActionHandler');
 
-        $adr->input('Custom\Input');
+        $adr->input('Web\ConsoleInput');
 
         // routes
         // /user            -- POST for signup/login, GET for stub list
@@ -49,7 +42,6 @@ class WebConfig extends ContainerConfig
         // /user/access     -- GET for all accesses
         // /user/{stub}/access     -- GET for the stub accesses
         $base = '/' . getEnv('USER_PATH');
-        $adr->post(  'UserEntry',     $base,                  'Link\UserEntry');
         $adr->get(   'StubList',      $base,                  'Link\StubList');
         $adr->put(   'StubOrdering',  $base,                  'Link\StubOrdering');
         $adr->post(  'StubEntry',     $base.'/new',           'Link\StubEntry');

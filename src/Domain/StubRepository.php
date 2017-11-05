@@ -13,7 +13,7 @@ class StubRepository
      */
     public function find(StubId $stubId);
 
-    public function findList(UserId $userId): StubList;
+    public function searchByOwner(UserId $userId): StubList;
 
     public function storeOrdering(StubList $stubs): void;
 

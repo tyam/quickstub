@@ -1,10 +1,10 @@
 <?php
 
-namespace Custom;
+namespace Web;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-class Input
+class ConsoleInput
 {
     public function __invoke(ServerRequestInterface $request)
     {
