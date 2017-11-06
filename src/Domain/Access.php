@@ -8,19 +8,26 @@ use DateTimeImmutable as Datetime;
 
 class Access
 {
+    private $accessId;
     private $stubId;
     private $ownerId;
     private $request;
     private $response;
     private $accessed;
 
-    public function __construct(StubId $stubId, UserId $ownerId, Request $request, Response $response, Datetime $accessed)
+    public function __construct(int $accessId, StubId $stubId, UserId $ownerId, Request $request, Response $response, Datetime $accessed)
     {
+        $this->accessId = $accessId;
         $this->stubId = $stubId;
         $this->ownerId = $ownerId;
         $this->request = $request;
         $this->response = $response;
         $this->accessed = $accessed;
+    }
+
+    public function getAccessId(): int
+    {
+        return $this->accessId;
     }
 
     public function getStubId(): StubId

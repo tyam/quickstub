@@ -15,10 +15,24 @@ Dotenv::load([
     'putenv' => true
 ]);
 
+/*
+ * Switch web configs 
+ */
+$webConfig = (function () {
+    $base = '/' . getEnv('USER_PATH');
+    if (strpos($_SERVER['REQUEST_URI'], $base) === 0) {
+        return 'ConsoleConfig';
+    } else {
+        return 'StubExecConfig';
+    }
+})();
+
+if ($_SERVER)
+
 $boot = new Boot();
 $adr = $boot->adr([
     'Config', 
-    'WebConfig'
+    $webConfig
 ], true);
 
 /**

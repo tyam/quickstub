@@ -80,14 +80,14 @@ CREATE TABLE stub (
 INSERT INTO sequence VALUES ('stubId', 532, 1);
 
 CREATE TABLE stubOrdering (
-    userId BIGINT NOT NULL, 
+    ownerId BIGINT NOT NULL, 
     ord INTEGER NOT NULL, 
     stubId BIGINT NOT NULL, 
-    PRIMARY KEY (userId, ord)
+    PRIMARY KEY (ownerId, ord)
 );
 
 CREATE TABLE access (
-    accessNo BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    accessId BIGINT NOT NULL PRIMARY KEY, 
     stubId BIGINT NOT NULL, 
     ownerId BIGINT NOT NULL, 
     request TEXT NOT NULL, 
@@ -95,4 +95,5 @@ CREATE TABLE access (
     accessed DATETIME NOT NULL, 
     INDEX byOwner (ownerId, accessed DESC), 
     INDEX byStub (stubId, accessed DESC)
-)
+);
+INSERT INTO sequence VALUES ('accessId', 255, 1);
