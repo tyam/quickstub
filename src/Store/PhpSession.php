@@ -15,6 +15,8 @@ class PhpSession implements \Domain\Session, \Web\Session
 
     private function init()
     {
+        $sevenDaysInSec = 7 * 24 * 60 * 60;
+        session_set_cookie_params($sevenDaysInSec);
         session_start();
         $this->sessionStarted = true;
         $this->rotate();

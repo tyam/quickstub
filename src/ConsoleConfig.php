@@ -43,10 +43,11 @@ class ConsoleConfig extends ContainerConfig
         // /user/{stub}/access     -- GET for the stub accesses
         $base = '/' . getEnv('USER_PATH');
         $adr->get(   'StubList',      $base,                  'Link\StubList');
+        $adr->post(  'StubInit',      $base,                  'Link\StubInit');
         $adr->put(   'StubOrdering',  $base,                  'Link\StubOrdering');
         $adr->post(  'StubEntry',     $base.'/new',           'Link\StubEntry');
-        $adr->put(   'StubUpdate',    $base.'/{stub}',        'Link\StubUpdate');
         $adr->get(   'StubRef',       $base.'/{stub}',        'Link\StubRef');
+        $adr->put(   'StubUpdate',    $base.'/{stub}',        'Link\StubUpdate');
         $adr->delete('StubRemoval',   $base.'/{stub}',        'Link\StubRemoval');
         $adr->get(   'AccessRef',     $base.'/access',        'Link\AccessRef');
         $adr->get(   'StubAccessRef', $base.'/{stub}/access', 'Link\StubAccessRef');

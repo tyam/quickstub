@@ -37,8 +37,10 @@ class Config extends ContainerConfig
         // Repositories
         // ---------------------------------------------------------
         $di->types['Domain\UserRepository'] = $di->lazyNew('Store\UserMapper');
+        $di->types['Domain\StubRepository'] = $di->lazyNew('Store\StubMapper');
+        $di->types['Domain\AccessRepository'] = $di->lazyNew('Store\AccessMapper');
 
-        // Mappers  mysql:dbname=testdb;host=127.0.0.1
+        // Mappers
         // ---------------------------------------------------------
         $di->set('db', $di->lazyNew('PDO'));
         $di->params['PDO']['dsn'] = sprintf('mysql:dbname=%s;host=%s', getenv('DATABASE_NAME'), getenv('DATABASE_HOST'));

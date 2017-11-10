@@ -9,7 +9,7 @@ class StubRepository
     public function store(Stub $stub): void;
 
     /**
-     * @return: maybe(Stub)
+     * @return: Nullable(Stub)
      */
     public function find(StubId $stubId);
 

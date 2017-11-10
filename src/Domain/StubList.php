@@ -47,11 +47,18 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
         return -1;
     }
 
-    public function moveItem(StubId $stubId, int $index): void
+    public function moveItem(StubId $stubId, int $index): bool
     {
+        if ($index < 0 || $index >= count($this->stubs)) {
+            return false;
+        }
         $from = $this->indexOf($stubId);
+        if ($from === -1) {
+            return false;
+        }
         list($target) = array_splice($this->stubs, $from, 1);
         array_splice($this->stubs, $index, 0, [$target]);
+        return true;
     }
 
     public function execute(Request $request, Response $response)

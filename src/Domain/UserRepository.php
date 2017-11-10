@@ -10,8 +10,10 @@ interface UserRepository
 
     /**
      *
-     * @return maybe(User) returns User when found, returns null when not found.
+     * @return Nullable(User) returns User when found, returns null when not found.
      *
      */
     public function find(UserId $userId);
+
+    public function getTheUserId(); UserId;
 }

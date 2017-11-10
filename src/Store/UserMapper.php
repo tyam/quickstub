@@ -34,6 +34,9 @@ class UserMapper implements UserRepository
                       ->execute([':displayName' => $record['displayName'], 
                                  ':userId' => $record['userId']]);
         } else {
+            // delete
+            $sql0 = "DELETE FROM user";
+            $this->pdo->prepare($sql0)->execute([]);
             // insert
             $sql1 = "INSERT INTO user VALUES (:userId, :displayName, :created)";
             $this->pdo->prepare($sql1)
@@ -71,5 +74,15 @@ class UserMapper implements UserRepository
         } else {
             return null;
         }
+    }
+
+    public function getTheUserId(): UserId
+    {
+        $sql0 = "SELECT * FROM user";
+        $stt0 = $this->pdo->prepare($sql0);
+        $stt0->execute([]);
+        $res0 = $stt0->fetch(\PDO::FETCH_ASSOC);
+        $userId = new UserId($res0['userId']);
+        return $userId;
     }
 }

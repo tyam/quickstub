@@ -48,7 +48,7 @@ class AccessMapper;
         return ['accessId' => $access->getAccessId(), 
                 'stubId' => $access->getStubId()->getValue(), 
                 'ownerId' => $access->getOwnerId()->getValue(), 
-                'request' => RequestSerializer::toString($access->getRequest()),  // TODO: server request
+                'request' => RequestSerializer::toString($access->getRequest()), 
                 'response' => ResponseSerializer::toString($access->getResponse()), 
                 'accessed' => $access->getAccessed()->format('Y-m-d H:i:s')];
     }
@@ -58,7 +58,7 @@ class AccessMapper;
         return new Access(intval($record['accessId']), 
                           new StubId($record['stubId']), 
                           new UserId($record['ownerId']), 
-                          RequestSerializer::fromString($record['request']),  // TODO: server request
+                          RequestSerializer::fromString($record['request']), 
                           ResponseSerializer::fromString($record['response']), 
                           new Datetime($record['accessed']));
     }

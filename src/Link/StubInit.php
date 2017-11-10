@@ -11,7 +11,7 @@ use Domain\StubRepository;
 use Aura\Payload\Payload;
 use Aura\Payload_Interface\PayloadStatus;
 
-class UserEntry 
+class StubInit 
 {
     private $userRepo;
     private $stubRepo;
