@@ -7,7 +7,7 @@
 
 namespace Domain;
 
-class StubRepository
+interface StubRepository
 {
     /**
      * StubIdを発行する。

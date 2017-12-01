@@ -6,13 +6,14 @@ use Domain\Access;
 use Domain\StubId;
 use Domain\UserId;
 use Domain\AccessList;
+use Domain\AccessRepository;
 use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Zend\Diactoros\Request\Serializer as RequestSerializer;
 use Zend\Diactoros\Response\Serializer as ResponseSerializer;
 use DateTimeImmutable as Datetime;
 
-class AccessMapper;
+class AccessMapper implements AccessRepository
 {
     private $pdo;
 

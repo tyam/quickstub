@@ -43,7 +43,7 @@ class PhpSession implements \Domain\Session, \Web\Session
         return ($_SESSION['currentUser']) ? $_SESSION['currentUser'] : null;
     }
 
-    public function setFeedback(s$ident): void
+    public function setFeedback($ident): void
     {
         if (!$this->sessionStarted) $this->init();
         $_SESSION['next']['feedback'] = $ident;

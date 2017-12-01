@@ -9,7 +9,7 @@
         "tyam/fadoc": "dev-master", 
         "tyam/edicue": "dev-master", 
         "tyam/bamboo": "dev-master", 
-        "tyam/radrax": "dev-master", 
+        "tyam/radarx": "dev-master", 
         "monolog/monolog": "*"
     },
     "require-dev": {

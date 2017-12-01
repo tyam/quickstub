@@ -38,5 +38,5 @@ interface UserRepository
      *
      * @return UserId
      */
-    public function getTheUserId(); UserId;
+    public function getTheUserId(): UserId;
 }

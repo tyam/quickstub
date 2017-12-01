@@ -8,8 +8,9 @@ use Domain\StubList;
 use Domain\Matcher;
 use Domain\Responder;
 use Domain\UserId;
+use Domain\StubRepository;
 
-class StubMapper
+class StubMapper implements StubRepository
 {
     private $pdo;
 
@@ -114,7 +115,7 @@ class StubMapper
 
     public function searchByOwner(UserId $ownerId): StubList
     {
-        $sql0 = "SELECT * FROM stub JOIN "
+        $sql0 = "SELECT * FROM stub "
               . "WHERE ownerId = :ownerId "
               . "ORDER BY ord";
         $stt0 = $this->pdo->prepare($sql0);

@@ -9,6 +9,7 @@ use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Relay\Middleware\ResponseSender;
 
 class StubConfig extends ContainerConfig
 {
@@ -16,7 +17,8 @@ class StubConfig extends ContainerConfig
     public function define(Container $di)
     {
         // 当ソフト固有のRouteオブジェクトをルータにインジェクト
-        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Web\Route');
+        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('tyam\radarx\Route');
+        $di->params['tyam\radarx\Route'][0] = 'Web';
     }
     
     public function modify(Container $di)

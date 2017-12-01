@@ -23,7 +23,7 @@ $webConfig = (function () {
     if (strpos($_SERVER['REQUEST_URI'], $base) === 0) {
         return 'ConsoleConfig';
     } else {
-        return 'StubExecConfig';
+        return 'StubConfig';
     }
 })();
 

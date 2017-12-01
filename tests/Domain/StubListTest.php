@@ -6,7 +6,7 @@ use Domain\Stub;
 use Domain\StubId;
 use Domain\UserId;
 use Domain\Matcher;
-use Domain\NoneAuthenticator;
+use Domain\NoneAuthorizer;
 use Domain\Responder;
 use Domain\StubList;
 use tyam\condition\Condition;
@@ -36,7 +36,7 @@ class StubListTest extends BaseCase
         return new Stub(new StubId($id), 
                         \App::getCurrentUser(), 
                         new Matcher($getEnabled, $postEnabled, false, false, false, $path), 
-                        new NoneAuthenticator(), 
+                        new NoneAuthorizer(), 
                         new Responder($statusCode, 'X-HEADER: abc', $body));
     }
 

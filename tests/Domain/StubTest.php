@@ -34,7 +34,7 @@ class StubTest extends BaseCase
         $this->assertEquals($stub->getStubId()->getValue(), 3);
         $this->assertEquals($stub->getOwnerId()->getValue(), 5);
         $this->assertEquals($stub->getMatcher(), new Matcher(true, false, false, false, false, '/stub3'));
-        $this->assertEquals($stub->getAuthenticator(), new NoneAuthorizer());
+        $this->assertEquals($stub->getAuthorizer(), new NoneAuthorizer());
         $this->assertEquals($stub->getResponder(), new Responder(200, '', 'Here QUICKSTUB is!'));
     }
 
@@ -47,7 +47,7 @@ class StubTest extends BaseCase
         $stub->modify($m, $a, $r);
 
         $this->assertEquals($stub->getMatcher(), $m);
-        $this->assertEquals($stub->getAuthenticator(), $a);
+        $this->assertEquals($stub->getAuthorizer(), $a);
         $this->assertEquals($stub->getResponder(), $r);
     }
 

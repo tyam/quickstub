@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class NoneAuthorizer implements Authorizer
 {
-    public function authorizer(Request $request): bool 
+    public function authorize(Request $request): bool 
     {
         return true;
     }
