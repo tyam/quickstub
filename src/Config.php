@@ -1,4 +1,10 @@
 <?php
+/**
+ * Config
+ *
+ * 当ソフト全体のDIコンフィグ。
+ * インフラ的な部分のセットアップや、DIのセットアップなど。
+ */
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
@@ -12,35 +18,35 @@ class Config extends ContainerConfig
 
     public function define(Container $di)
     {
-        // Application infrastructure
+        // アプリケーションのインフラ部分
         // ---------------------------------------------------------
-        // app
+        // App
         $di->params['Domain\App'][0] = $di->lazyGet('logger');
         $di->params['Domain\App'][1] = $di->lazyNew('tyam\edicue\Dispatcher');
         $di->params['Domain\App'][2] = $di->lazyGet('session');
 
-        // logger
+        // Logger
         $di->set('logger', $di->lazyNew('Monolog\Logger'));
         $di->params['Monolog\Logger'][0] = self::APP_NAME;
 
-        // session
+        // Session
         $di->set('session', $di->lazyNew('Store\PhpSession'));
 
-        // dispatcher
+        // Dispatcher
         $di->params['Aura\Di\ResolutionHelper']['container'] = $di;
         $di->params['tyam\edicue\Dispatcher'][0] = $di->lazyNew('Aura\Di\ResolutionHelper');
         $di->params['tyam\edicue\Dispatcher'][1] = null;
         $di->params['tyam\edicue\Dispatcher'][2] = [
-            // add listeners here.
+            // ここにリスナを登録していく。
         ];
         
-        // Repositories
+        // レポジトリ（インターフェイス）とマッパ（実装）の関連付け
         // ---------------------------------------------------------
         $di->types['Domain\UserRepository'] = $di->lazyNew('Store\UserMapper');
         $di->types['Domain\StubRepository'] = $di->lazyNew('Store\StubMapper');
         $di->types['Domain\AccessRepository'] = $di->lazyNew('Store\AccessMapper');
 
-        // Mappers
+        // データベースの設定
         // ---------------------------------------------------------
         $di->set('db', $di->lazyNew('PDO'));
         $di->params['PDO']['dsn'] = sprintf('mysql:dbname=%s;host=%s', getenv('DATABASE_NAME'), getenv('DATABASE_HOST'));
@@ -52,12 +58,11 @@ class Config extends ContainerConfig
 
     public function modify(Container $di)
     {
-        // setup monolog
+        // monologのセットアップ
         $logger = $di->get('logger');
-        //$logger->pushHandler(new SyslogHandler(self::APP_NAME));
         $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
 
-        // instantiate App to make the singleton.
+        // Appのシングルトンインスタンスの生成
         $di->newInstance('Domain\App');
         class_alias('Domain\App', 'App');
     }

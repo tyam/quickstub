@@ -1,4 +1,10 @@
 <?php
+/**
+ * Matcher
+ *
+ * アクセスが当該スタブへのアクセスなのかを判定する。スタブのVO。
+ * HTTPリクエストのメソッドとパスを見て、それが自身の定義と合致するかを判定する。
+ */
 
 namespace Domain;
 
@@ -13,7 +19,6 @@ class Matcher
     private $deleteEnabled;
     private $patchEnabled;
     private $path;  // e.g., /items/{item}/comments/
-    //private $fragments;  // path fragments e.g., ['items', '{item}', 'comments', ''] for /items/{item}/comments/
 
     public function __construct(bool $getEnabled, 
                                 bool $postEnabled, 
@@ -60,6 +65,12 @@ class Matcher
         return $this->path;
     }
 
+    /**
+     * パスを断片に分解する。パスの末尾が'/'の場合はリストの最後の要素が空文字になる。
+     *
+     * @param string $path
+     * @return array
+     */
     protected static function explodePath($path)
     {
         // remove heading slash
@@ -71,7 +82,10 @@ class Matcher
     }
 
     /**
-     * validation method
+     * `$path`プロパティのためのバリデーションメソッド。
+     * 
+     * @param string $val
+     * @return Condition(string,string) 成功時にはパスを、失敗時にはエラー文字列を返す。
      */
     public static function validatePath($val)
     {
@@ -108,6 +122,14 @@ class Matcher
         return Condition::fine($val);
     }
 
+    /**
+     * パターンの断片とリクエストURLの断片をマッチングする。
+     * マッチングの結果、環境に束縛（変数名から値へのマッピング）が追加される場合は束縛を返す。
+     * 
+     * @param string $patn パターンの断片
+     * @param string $val リクエストURLの断片
+     * @return array|false 成功時には束縛を返し、失敗時にはfalseを返す。
+     */
     protected function matchFragment($patn, $val)
     {
         if (strlen($patn) > 0 && $patn[0] == '{') {
@@ -124,6 +146,12 @@ class Matcher
         }
     }
 
+    /**
+     * パターンのメソッドとリクエストメソッドをマッチングする。
+     *
+     * @param string $method
+     * @return bool
+     */
     protected function matchMethod($method)
     {
         if ($method === 'GET' || $method === 'HEAD') {
@@ -141,6 +169,13 @@ class Matcher
         }
     }
 
+    /**
+     * HTTPリクエストをマッチングする。
+     * 成功時には束縛環境（変数から値へのマッピング）を返し、失敗時にはfalseを返す。
+     *
+     * @param ServerRequestInterface $request
+     * @return array|false 
+     */
     public function match(Request $request)
     {
         $method = $request->getMethod();

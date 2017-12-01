@@ -1,4 +1,9 @@
 <?php
+/**
+ * StubConfig
+ *
+ * スタブにアクセスがあった際に使われるDIコンフィグ。
+ */
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
@@ -10,7 +15,7 @@ class StubConfig extends ContainerConfig
     
     public function define(Container $di)
     {
-        // set project-specific router to customise responder auto-resolution.
+        // 当ソフト固有のRouteオブジェクトをルータにインジェクト
         $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Web\Route');
     }
     
@@ -18,12 +23,13 @@ class StubConfig extends ContainerConfig
     {
         $adr = $di->get('radar/adr:adr');
 
-        // middlewares
+        // ミドルウェアの設定
         $adr->middle(new ResponseSender());
         $adr->middle(['Web\StubExecInput', 'carryResponse']);
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
         $adr->middle('Radar\Adr\Handler\ActionHandler');
 
+        // ルートは、すべてStubExecが実行されるように設定
         $adr->route('StubExec', '/', 'Link\StubExec')->wildcard('x')
             ->allows(['GET', 'PUT', 'POST', 'DELETE', 'PATCH']);
     }

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Responder
+ *
+ * スタブのレスポンスを作るオブジェクト。スタブのVO。
+ */
 
 namespace Domain;
 
@@ -33,6 +38,12 @@ class Responder
         return $this->body;
     }
 
+    /**
+     * statusCodeのバリデーションメソッド
+     *
+     * @param int $val
+     * @return Condition(int,string) 成功時にはステータスコードを整数で返す、失敗時にはエラー文字列を返す。
+     */
     public static function validateStatusCode(int $val)
     {
         if ($val < 100) {
@@ -44,6 +55,12 @@ class Responder
         return Condition::fine($val);
     }
 
+    /**
+     * 複数行のヘッダ文字列を、ヘッダ名とヘッダ値のリストのリストに分解する。
+     *
+     * @param string $header
+     * @return array [[$name, $value], ...]
+     */
     protected static function explodeHeader(string $header)
     {
         $rv = [];
@@ -58,6 +75,12 @@ class Responder
         return $rv;
     }
 
+    /**
+     * 複数行のヘッダ文字列のバリデーションメソッド
+     * 
+     * @param string $header
+     * @return Condition(string,string) 成功時にはヘッダ文字列を、失敗時にはエラー文字列を返す。
+     */
     public static function validateHeader(string $header)
     {
         $lines = self::explodeHeader($header);
@@ -76,6 +99,13 @@ class Responder
         return Condition::fine($header);
     }
 
+    /**
+     * 文字列`subject`に対して、環境`env`で差し込みを行う。
+     *
+     * @param string $subject
+     * @param array $env 環境（変数名から値へのマッピング）
+     * @return string 差込後の文字列
+     */
     protected static function evaluate($subject, $env)
     {
         $lookup = function ($matches) use ($env)
@@ -89,6 +119,15 @@ class Responder
         return preg_replace_callback('/{([a-zA-Z0-9]+)}/', $lookup, $subject);
     }
 
+    /**
+     * HTTPレスポンスを作成する。
+     * 本来、このメソッドは`response`パラメータを受け取る必要はないが、PSR-7には
+     * HTTPレスポンスをnewするI/Fが無いためこのような形にした。
+     *
+     * @param ResponseInterface $response ベースとなるレスポンス
+     * @param array $env 環境（変数名から値へのマッピング）
+     * @return ResponseInterface 作成されたレスポンス
+     */
     public function respond(Response $response, $env): Response
     {
         $response = $response->withStatus($this->statusCode);

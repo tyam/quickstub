@@ -1,4 +1,7 @@
 <?php
+/**
+ * PhpSession
+ */
 
 namespace Store;
 

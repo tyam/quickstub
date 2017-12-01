@@ -1,4 +1,10 @@
 <?php
+/**
+ * Access
+ *
+ * スタブに発生したアクセス。アクセス履歴として参照できるようになっている。
+ *
+ */
 
 namespace Domain;
 
@@ -55,6 +61,12 @@ class Access
         return $this->accessed;
     }
 
+    /**
+     * イベントからアクセスオブジェクトを作る。
+     *
+     * @param AccessEvent $ev
+     * @return Access
+     */
     public static function createFromEvent(AccessEvent $ev): Access
     {
         return new Access($ev->getStub()->getStubId(), 

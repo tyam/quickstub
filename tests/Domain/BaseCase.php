@@ -28,6 +28,19 @@ class FakeSession implements \Domain\Session
 
 class BaseCase extends TestCase
 {
+    /**
+     * `obj`の`method`を表現するクロージャを返す。
+     *
+     * @param $obj ターゲットとなるオブジェクト
+     * @param string $method ターゲットとなるメソッドの名前
+     * @return Closure
+     */
+    public function reveal($obj, string $method): \Closure 
+    {
+        $m = new \ReflectionMethod($obj, $method);
+        return $m->getClosure();
+    }
+    
     public function setUp()
     {
         if (! App::hasSingleton()) {

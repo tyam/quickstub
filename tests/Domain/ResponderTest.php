@@ -6,12 +6,9 @@ use Domain\Responder;
 use tyam\condition\Condition;
 use Psr\Http\Message\ResponseInterface as IResponse;
 use Zend\Diactoros\Response;
-use Custom\Reveal;
 
 class ResponderTest extends BaseCase
 {
-    use Reveal;
-
     public function testGetter()
     {
         $r0 = new Responder(200, 'ABC:xyz', 'hello');

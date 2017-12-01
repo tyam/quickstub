@@ -13,7 +13,6 @@ use tyam\condition\Condition;
 use Psr\Http\Message\ResponseInterface as IResponse;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
-use Custom\Reveal;
 
 class StubListTest extends BaseCase
 {

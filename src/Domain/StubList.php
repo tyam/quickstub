@@ -1,4 +1,12 @@
 <?php
+/**
+ * StubList
+ *
+ * スタブのリスト。
+ * HTTPリクエストはこのリストに対してマッチングがかけられる。
+ * リストの順序は重要で、マッチングは上から順に行われる。
+ * HTTPリクエストにマッチするスタブが無い場合には404レスポンスが返却される。
+ */
 
 namespace Domain;
 
@@ -11,12 +19,21 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
     private $stubs;
     private $responder404;
 
+    /**
+     * デフォルトの404レスポンダを作る。
+     *
+     * @return ResponseInterface
+     */
     public static function createDefaultResponder404(): Responder
     {
         $responder = new Responder(404, '', '');
         return $responder;
     }
 
+    /**
+     * `responder404`は、HTTPリクエストにマッチするスタブが無かった場合のレスポンスを
+     * 作成するレンポンダ。これにnullが与えられた場合はデフォルトのレスポンダが使われる。
+     */
     public function __construct(array $stubs, Responder $responder404 = null)
     {
         $this->stubs = $stubs;
@@ -36,6 +53,13 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
         $this->responder404 = $responder404;
     }
 
+    /**
+     * IDが`stubId`のスタブを探して、リスト上のその添字を返す。
+     * 対応するスタブが見つからない場合は-1を返す。
+     *
+     * @param StubId $stubId
+     * @return int 添字または-1
+     */
     public function indexOf(StubId $stubId): int 
     {
         $len = count($this->stubs);
@@ -47,6 +71,14 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
         return -1;
     }
 
+    /**
+     * IDが`stubId`であるスタブを、リスト上の`index`の場所に移動する。
+     * `index`は対象のスタブをリストからいったん取り除いた後の添字であることに注意。
+     *
+     * @param StubId $stubId 対象となるスタブのID
+     * @param int $index 移動先の添字
+     * @return bool 移動が成功したか否か
+     */
     public function moveItem(StubId $stubId, int $index): bool
     {
         if ($index < 0 || $index >= count($this->stubs)) {
@@ -61,6 +93,13 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
         return true;
     }
 
+    /**
+     * HTTPリクエストに対してスタブリストを起動する。
+     *
+     * @param ServerRequestInterface $request HTTPリクエスト
+     * @param ResponseInterface $response ベースとなるHTTPレスポンス
+     * @return ResponseInterface 実行結果のHTTPレスポンス
+     */
     public function execute(Request $request, Response $response)
     {
         foreach ($this->stubs as $stub) {

@@ -1,4 +1,15 @@
 <?php
+/**
+ * ConsoleInput
+ * 
+ * コンソール固有のInput。
+ * ルートにパラメータがあれば、それを出現順にリストアップし、最後にフォームを付加する。
+ * フォームは、メソッドがHEAD、GET、DELETEの場合はクエリ文字列を、
+ * メソッドがPOST、PATCH、PUTの場合はparsedBodyとする。
+ * たとえば、GET /comment/3/12?format=jsonの場合であれば、抽出される入力は
+ * `[3, 12, ['format' => 'json']]`
+ * となる。
+ */
 
 namespace Web;
 

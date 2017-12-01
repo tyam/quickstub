@@ -9,6 +9,7 @@
         "tyam/fadoc": "dev-master", 
         "tyam/edicue": "dev-master", 
         "tyam/bamboo": "dev-master", 
+        "tyam/radrax": "dev-master", 
         "monolog/monolog": "*"
     },
     "require-dev": {
@@ -28,6 +29,10 @@
         {
             "type": "vcs", 
             "url": "https://github.com/tyam/bamboo"
+        }, 
+        {
+            "type": "vcs", 
+            "url": "https://github.com/tyam/radarx"
         }
     ], 
     "autoload": {

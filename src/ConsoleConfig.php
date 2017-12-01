@@ -1,4 +1,11 @@
 <?php
+/**
+ * ConsoleConfig
+ *
+ * 「コンソール」は、ユーザがスタブを管理する画面のこと。
+ * このクラスはコンソールに特化したDIコンフィグ。
+ * HTTPミドルウェアやradarのカスタマイズ、ルーティングの設定など。
+ */
 
 use Aura\Di\Container;
 use Aura\Di\ContainerConfig;
@@ -12,35 +19,32 @@ class ConsoleConfig extends ContainerConfig
 {
     public function define(Container $di)
     {
-        // set project-specific router to customise responder auto-resolution.
-        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('Web\Route');
+        // 当ソフト固有のRouteオブジェクトをルータにインジェクト
+        $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('tyam\radarx\Route');
+        $di->params['tyam\radarx\Route'][0] = 'Web';
         
-        // setup RunDomain trait
-        $di->setters['Web\RunDomain']['setResolve'] = $di->lazyNew('Aura\Di\ResolutionHelper');
+        // RunDomainトレイトのレゾルバをインジェクト
+        $di->setters['tyam\radarx\RunDomain']['setResolve'] = $di->lazyNew('Aura\Di\ResolutionHelper');
     }
     
     public function modify(Container $di)
     {
         $adr = $di->get('radar/adr:adr');
 
-        // middlewares
+        // ミドルウェアの設定
+        //---------------------------------------
         $adr->middle(new ResponseSender());
         $adr->middle(new SessionHeadersHandler());
         $adr->middle(new JsonContentHandler());
         $adr->middle(new ExceptionHandler(new Response()));
-        $adr->middle('Web\XMethodHandler');
+        $adr->middle('tyam\radarx\XMethodHandler');
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
         $adr->middle('Radar\Adr\Handler\ActionHandler');
 
         $adr->input('Web\ConsoleInput');
 
-        // routes
-        // /user            -- POST for signup/login, GET for stub list
-        // /user/ordering   -- PUT for re-ordering
-        // /user/new        -- POST for create stub
-        // /user/{stub}     -- PUT for update, GET for refer, DELETE for delete
-        // /user/access     -- GET for all accesses
-        // /user/{stub}/access     -- GET for the stub accesses
+        // ルートの設定
+        //---------------------------------------
         $base = '/' . getEnv('USER_PATH');
         $adr->get(   'StubList',      $base,                  'Link\StubList');
         $adr->post(  'StubInit',      $base,                  'Link\StubInit');

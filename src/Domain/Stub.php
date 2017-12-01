@@ -1,4 +1,9 @@
 <?php
+/**
+ * Stub
+ *
+ * 単一のスタブURLを表現するエンティティ。
+ */
 
 namespace Domain;
 
@@ -11,33 +16,45 @@ class Stub
     private $stubId;
     private $ownerId;
     private $matcher;
-    private $authenticator;
+    private $authorizer;
     private $responder;
 
     public function __construct(StubId $stubId, 
                                 UserId $ownerId, 
                                 Matcher $matcher, 
-                                Authenticator $authenticator, 
+                                Authorizer $authorizer, 
                                 Responder $responder)
     {
         $this->stubId = $stubId;
         $this->ownerId = $ownerId;
         $this->matcher = $matcher;
-        $this->authenticator = $authenticator;
+        $this->authorizer = $authorizer;
         $this->responder = $responder;
     }
 
+    /** 
+     * デフォルト状態のスタブを作成する。
+     * デフォルトのスタブは、'GET /stubXXXXX'のみを受け付け、権限を判定せずに、
+     * 'Here QUICKSTUB is!'という文字列をステータスコード200で応答する。
+     *
+     * @param Callable $reserveId スタブIDを発行する関数
+     * @return Stub
+     */
     public static function create(Callable $reserveId)
     {
         $stubId = $reserveId();
         $ownerId = \App::getCurrentUser();
         $matcher = new Matcher(true, false, false, false, false, '/stub'.$stubId->getValue());
-        $authenticator = new NoneAuthenticator();
+        $authorizer = new NoneAuthorizer();
         $responder = new Responder(200, '', 'Here QUICKSTUB is!');
-        return new Stub($stubId, $ownerId, $matcher, $authenticator, $responder);
+        return new Stub($stubId, $ownerId, $matcher, $authorizer, $responder);
     }
 
     /**
+     * スタブを実行する。実行の結果は次の通り：
+     * - メソッドやパスがマッチしない -> false
+     * - スタブへのアクセス権限が無い -> 403レスポンス
+     * - スタブが実行された -> Responderによるレスポンス
      * @return maybe(Response); 
      */
     public function execute(Request $request, Response $response)
@@ -48,8 +65,8 @@ class Stub
         }
         $vars = $result;
 
-        if (! $this->authenticator->authenticate($request)) {
-            return null;
+        if (! $this->authorizer->authorize($request)) {
+            return $response->withStatusCode(403);
         }
 
         return $this->responder->respond($response, $vars);
@@ -70,9 +87,9 @@ class Stub
         return $this->matcher;
     }
 
-    public function getAuthenticator(): Authenticator
+    public function getAuthorizer(): Authorizer
     {
-        return $this->authenticator;
+        return $this->authorizer;
     }
 
     public function getResponder(): Responder 
@@ -80,10 +97,10 @@ class Stub
         return $this->responder;
     }
 
-    public function modify(Matcher $matcher, Authenticator $authenticator, Responder $responder)
+    public function modify(Matcher $matcher, Authorizer $authorizer, Responder $responder)
     {
         $this->matcher = $matcher;
-        $this->authenticator = $authenticator;
+        $this->authorizer = $authorizer;
         $this->responder = $responder;
     }
 }

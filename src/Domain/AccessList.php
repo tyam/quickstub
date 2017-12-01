@@ -1,4 +1,9 @@
 <?php
+/**
+ * AccessList
+ *
+ * アクセスのリスト。
+ */
 
 namespace Domain;
 

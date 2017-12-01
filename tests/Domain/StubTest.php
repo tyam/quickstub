@@ -6,13 +6,12 @@ use Domain\Stub;
 use Domain\StubId;
 use Domain\UserId;
 use Domain\Matcher;
-use Domain\NoneAuthenticator;
+use Domain\NoneAuthorizer;
 use Domain\Responder;
 use tyam\condition\Condition;
 use Psr\Http\Message\ResponseInterface as IResponse;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Response;
-use Custom\Reveal;
 
 class StubTest extends BaseCase
 {
@@ -35,7 +34,7 @@ class StubTest extends BaseCase
         $this->assertEquals($stub->getStubId()->getValue(), 3);
         $this->assertEquals($stub->getOwnerId()->getValue(), 5);
         $this->assertEquals($stub->getMatcher(), new Matcher(true, false, false, false, false, '/stub3'));
-        $this->assertEquals($stub->getAuthenticator(), new NoneAuthenticator());
+        $this->assertEquals($stub->getAuthenticator(), new NoneAuthorizer());
         $this->assertEquals($stub->getResponder(), new Responder(200, '', 'Here QUICKSTUB is!'));
     }
 
@@ -43,7 +42,7 @@ class StubTest extends BaseCase
     {
         $stub = Stub::create($this->createGenerator(10));
         $m = new Matcher(true, true, true, true, true, '/my/abc');
-        $a = new NoneAuthenticator();
+        $a = new NoneAuthorizer();
         $r = new Responder(301, 'X-HEADER: xyz', 'fine');
         $stub->modify($m, $a, $r);
 
@@ -64,7 +63,7 @@ class StubTest extends BaseCase
     {
         $stub = Stub::create($this->createGenerator(7));
         $m = new Matcher(true, false, false, false, false, '/item/{id}');
-        $a = new NoneAuthenticator();
+        $a = new NoneAuthorizer();
         $r = new Responder(200, 'X-HEADER: xyz', 'fine, {id}');
         $stub->modify($m, $a, $r);
 

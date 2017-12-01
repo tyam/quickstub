@@ -91,9 +91,9 @@ class StubMapper
         $deleteEnabled = (floor($record['methods'] / 16) * 2 != $record['methods'] / 8);
         $patchEnabled = (floor($record['methods'] / 32) * 2 != $record['methods'] / 16);
         $matcher = new Matcher($getEnabled, $postEnabled, $putEnabled, $deleteEnabled, $patchEnabled, $record['path']);
-        $authenticator = new NoneAuthenticator();
+        $authorizer = new NoneAuthorizer();
         $responder = new Responder($record['statusCode'], $record['header'], $record['body']);
-        return new Stub($stubId, $ownerId, $matcher, $authenticator, $responder);
+        return new Stub($stubId, $ownerId, $matcher, $authorizer, $responder);
     }
 
     /**

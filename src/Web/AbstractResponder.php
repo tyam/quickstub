@@ -1,4 +1,10 @@
 <?php
+/**
+ * AbstractResponder
+ *
+ * 画面やJSONレンポンダの共通スーパークラス。
+ * DIでテンプレートエンジンとセッションをインジェクトしている。
+ */
 
 namespace Web;
 

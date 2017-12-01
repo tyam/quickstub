@@ -16,7 +16,7 @@ Dotenv::load([
 ]);
 
 /*
- * Switch web configs 
+ * URLに応じてセットするDIコンフィグを差し替える。
  */
 $webConfig = (function () {
     $base = '/' . getEnv('USER_PATH');

@@ -1,4 +1,7 @@
 <?php
+/**
+ * StubId
+ */
 
 namespace Domain;
 
