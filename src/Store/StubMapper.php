@@ -121,7 +121,8 @@ class StubMapper implements StubRepository
         $stt0 = $this->pdo->prepare($sql0);
         $stt0->execute([':ownerId' => $ownerId->getValue()]);
         $stubs = [];
-        foreach ($stt0->fetch(\PDO::FETCH_ASSOC) as $res) {
+
+        while ($res = $stt0->fetch(\PDO::FETCH_ASSOC)) {
             $stubs[] = $this->fromRecord($res);
         }
         return new StubList($stubs);

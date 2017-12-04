@@ -26,7 +26,9 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
      */
     public static function createDefaultResponder404(): Responder
     {
-        $responder = new Responder(404, '', '');
+        $headers = 'Content-Type: text/html';
+        $body = '<html><body>Try <a href="'.\getEnv('USER_PATH').'">here</a></body></html>';
+        $responder = new Responder(404, $headers, $body);
         return $responder;
     }
 

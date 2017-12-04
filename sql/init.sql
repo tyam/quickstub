@@ -67,6 +67,7 @@ CREATE TABLE user (
     created DATETIME NOT NULL
 );
 INSERT INTO sequence VALUES ('userId', 121, 1);
+INSERT INTO user VALUES (nextval('userId'), '新規ユーザー', NOW());
 
 CREATE TABLE stub (
     stubId BIGINT NOT NULL PRIMARY KEY, 

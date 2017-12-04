@@ -23,6 +23,9 @@ class PhpSession implements \Domain\Session, \Web\Session
         session_start();
         $this->sessionStarted = true;
         $this->rotate();
+
+        // カレントユーザを設定する。
+        $this->setCurrentUser(new UserId(122));
     }
     
     protected function rotate()
