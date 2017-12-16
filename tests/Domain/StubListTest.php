@@ -25,7 +25,7 @@ class StubListTest extends BaseCase
     private function createGenerator(int $i)
     {
         return function () use ($i) {
-            return new StubId($i);
+            return StubId::fromInt($i);
         };
     }
 
@@ -33,7 +33,7 @@ class StubListTest extends BaseCase
     {
         $getEnabled = ($method == 'GET');
         $postEnabled = ($method == 'POST');
-        return new Stub(new StubId($id), 
+        return new Stub(StubId::fromInt($id), 
                         \App::getCurrentUser(), 
                         new Matcher($getEnabled, $postEnabled, false, false, false, $path), 
                         new NoneAuthorizer(), 
@@ -64,19 +64,19 @@ class StubListTest extends BaseCase
     public function testMoveItem()
     {
         $list = $this->createStubList();        
-        $list->moveItem(new StubId(2), 0);
-        $this->assertEquals($list[0]->getStubId()->getValue(), 2);
-        $this->assertEquals($list[1]->getStubId()->getValue(), 1);
+        $list->moveItem(StubId::fromInt(2), 0);
+        $this->assertEquals($list[0]->getStubId()->toInt(), 2);
+        $this->assertEquals($list[1]->getStubId()->toInt(), 1);
         
         $list = $this->createStubList();
-        $list->moveItem(new StubId(10), 2);
-        $this->assertEquals($list[1]->getStubId()->getValue(), 2);
-        $this->assertEquals($list[2]->getStubId()->getValue(), 10);
+        $list->moveItem(StubId::fromInt(10), 2);
+        $this->assertEquals($list[1]->getStubId()->toInt(), 2);
+        $this->assertEquals($list[2]->getStubId()->toInt(), 10);
 
         $list = $this->createStubList();
-        $list->moveItem(new StubId(10), 3);
-        $this->assertEquals($list[2]->getStubId()->getValue(), 3);
-        $this->assertEquals($list[3]->getStubId()->getValue(), 10);
+        $list->moveItem(StubId::fromInt(10), 3);
+        $this->assertEquals($list[2]->getStubId()->toInt(), 3);
+        $this->assertEquals($list[3]->getStubId()->toInt(), 10);
     }
 
     private function mockRequest($method, $path)

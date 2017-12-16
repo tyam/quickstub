@@ -24,16 +24,16 @@ class StubTest extends BaseCase
     public function createGenerator(int $i)
     {
         return function () use ($i) {
-            return new StubId($i);
+            return StubId::fromInt($i);
         };
     }
 
     public function testGetter()
     {
         $stub = Stub::create($this->createGenerator(3));
-        $this->assertEquals($stub->getStubId()->getValue(), 3);
+        $this->assertEquals($stub->getStubId()->toInt(), 3);
         $this->assertEquals($stub->getOwnerId()->getValue(), 5);
-        $this->assertEquals($stub->getMatcher(), new Matcher(true, false, false, false, false, '/stub3'));
+        $this->assertEquals($stub->getMatcher(), new Matcher(true, false, false, false, false, '/stub000003'));
         $this->assertEquals($stub->getAuthorizer(), new NoneAuthorizer());
         $this->assertEquals($stub->getResponder(), new Responder(200, '', 'Here QUICKSTUB is!'));
     }

@@ -3,9 +3,9 @@
 namespace Link;
 
 use Domain\Stub;
+use Domain\StubId;
 use Domain\StubRepository;
-use Aura\Payload\Payload;
-use Aura\Payload_Interface\PayloadStatus;
+use tyam\radarx\PayloadFactory;
 use tyam\fadoc\Converter;
 
 class StubUpdate
@@ -19,33 +19,26 @@ class StubUpdate
         $this->converter = $converter;
     }
 
-    public function __invoke($id, $form)
+    public function __invoke(StubId $stubId, $form, $payloadFactory)
     {
         $userId = \App::getCurrentUser();
         if (is_null($userId)) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_AUTHENTICATED);
+            return $payloadFactory->notAuthenticated();
         }
 
-        $cd0 = $this->converter->objectize(['Domain\StubId', '__construct'], ['value' => $id]);
-        if (! $cd0()) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_FOUND);
-        }
-
-        $stubId = call_user_func_array(['Domain\StubId', '__construct'], $cd0->get());
-
-        $stub = $this->find($stubId);
+        $stub = $this->stubRepo->find($stubId);
         if (is_null($stub)) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_FOUND);
+            return $payloadFactory->notFound();
         }
 
         $cd1 = $this->converter->objectize([$stub, 'modify'], $form);
         if (! $cd1()) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_VALID)
-              ->setOutput(['form' => $form, 'errors' => $cd1->describe()]);
+            return $payloadFactory->notValid($stub, $cd1->describe());
         }
 
-        call_user_func_array([$stub, 'modify'], $cd1->get());
-
-        return (new Payload())->setStatus(PayloadStatus::UPDATED)->setOutput($stub);
+        list($matcher, $authorizer, $responder) = $cd1->get();
+        $stub->modify($matcher, $authorizer, $responder);
+        $this->stubRepo->store($stub);
+        return $payloadFactory->success($stub, null);
     }
 }

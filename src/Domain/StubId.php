@@ -5,22 +5,39 @@
 
 namespace Domain;
 
+use tyam\condition\Condition;
+
 class StubId
 {
     private $value;
 
-    public function __construct(int $value)
+    public function __construct(string $value)
     {
         $this->value = $value;
     }
     
     public function __toString(): string
     {
-        return sprintf('%06d', $this->value);
+        return $this->value;
     }
 
-    public function getValue(): int
+    public static function fromInt(int $i): StubId
     {
-        return $this->value;
+        return new StubId(sprintf('%06d', $i));
+    }
+
+    public static function validateValue($x): Condition
+    {
+        $i = intval($x);
+        if (sprintf('%06d', $i) === $x) {
+            return Condition::fine($x);
+        } else {
+            return Condition::poor('invalid');
+        }
+    }
+
+    public function toInt(): int
+    {
+        return intval($this->value);
     }
 }

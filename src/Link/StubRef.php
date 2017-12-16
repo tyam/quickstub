@@ -2,43 +2,33 @@
 
 namespace Link;
 
+use Domain\StubId;
 use Domain\Stub;
 use Domain\StubRepository;
-use Aura\Payload\Payload;
-use Aura\Payload_Interface\PayloadStatus;
-use tyam\fadoc\Converter;
+use tyam\radarx\PayloadFactory;
 
 class StubRef
 {
     private $stubRepo;
     private $converter;
 
-    public function __construct(StubRepository $stubRepo, Converter $converter)
+    public function __construct(StubRepository $stubRepo)
     {
         $this->stubRepo = $stubRepo;
-        $this->converter = $converter;
     }
 
-    public function __invoke($id)
+    public function __invoke(StubId $stubId, $form, $payloadFactory)
     {
         $userId = \App::getCurrentUser();
         if (is_null($userId)) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_AUTHENTICATED);
+            return $payloadFactory->notAuthenticated();
         }
 
-        $cd0 = $this->converter->objectize(['Domain\StubId', '__construct'], ['value' => $id]);
-        if (! $cd0()) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_FOUND);
-        }
-
-        $stubId = call_user_func_array(['Domain\StubId', '__construct'], $cd0->get());
-
-        $stub = $this->find($stubId);
+        $stub = $this->stubRepo->find($stubId);
         if (is_null($stub)) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_FOUND);
+            return $payloadFactory->notFound();
         }
 
-        $form = $this->converter->formulize($stub);
-        return (new Payload())->setStatus(PayloadStatus::FOUND)->setOutput($form);
+        return $payloadFactory->success(null, $stub);
     }
 }

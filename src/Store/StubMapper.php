@@ -6,6 +6,7 @@ use Domain\StubId;
 use Domain\Stub;
 use Domain\StubList;
 use Domain\Matcher;
+use Domain\NoneAuthorizer;
 use Domain\Responder;
 use Domain\UserId;
 use Domain\StubRepository;
@@ -23,8 +24,8 @@ class StubMapper implements StubRepository
     {
         $sql = "SELECT nextval('stubId') AS stubId";
         $stt = $this->pdo->query($sql);
-        $stubId = $stt->fetchColumn();
-        return new StubId($stubId);
+        $value = intval($stt->fetchColumn());
+        return StubId::fromInt($value);
     }
 
     public function store(Stub $stub): void
@@ -44,7 +45,8 @@ class StubMapper implements StubRepository
                                  ':path' => $record['path'], 
                                  ':statusCode' => $record['statusCode'], 
                                  ':header' => $record['header'], 
-                                 ':body' => $record['body']]);
+                                 ':body' => $record['body'], 
+                                 ':stubId' => $record['stubId']]);
         } else {
             // insert
             $sql1 = "INSERT INTO stub VALUES (:stubId, :ownerId, :methods, :path, :statusCode, :header, :body)";
@@ -57,10 +59,10 @@ class StubMapper implements StubRepository
                                  ':header' => $record['header'], 
                                  ':body' => $record['body']]);
             // insert into ordering as the first item.
-            $sql2 = "INSERT INTO stubOrdering (:ownerId, (SELECT MIN(ord) - 1 FROM stubOrdering WHERE ownerId = :ownerId), :stubId)";
-            $this->pdo->prepare($sql2)
-                      ->execute([':stubId' => $record['stubId'], 
-                                 ':ownerId' => $record['ownerId']]);
+            $sql2 = "INSERT INTO stubOrdering VALUES (:ownerId, (SELECT o FROM (SELECT IFNULL(MIN(ord), 0) - 1 as o FROM stubOrdering WHERE ownerId = :ownerId) as t), :stubId)";
+            $stt2 = $this->pdo->prepare($sql2);
+            $stt2->execute([':stubId' => $record['stubId'], 
+                            ':ownerId' => $record['ownerId']]);
         }
     }
 
@@ -73,7 +75,7 @@ class StubMapper implements StubRepository
         $methods += ($matcher->isPutEnabled()) ? 4 : 0;
         $methods += ($matcher->isDeleteEnabled()) ? 8 : 0;
         $methods += ($matcher->isPatchEnabled()) ? 16 : 0;
-        return ['stubId' => $stub->getStubId()->getValue(), 
+        return ['stubId' => $stub->getStubId()->toInt(), 
                 'ownerId' => $stub->getOwnerId()->getValue(), 
                 'methods' => $methods, 
                 'path' => $matcher->getPath(), 
@@ -84,13 +86,13 @@ class StubMapper implements StubRepository
 
     private function fromRecord(array $record): Stub
     {
-        $stubId = new StubId($record['stubId']);
+        $stubId = StubId::fromInt($record['stubId']);
         $ownerId = new UserId($record['ownerId']);
-        $getEnabled = (floor($record['methods'] / 2) * 2 != $record['methods']);
-        $postEnabled = (floor($record['methods']) / 4) * 2 != $record['methods'] / 2;
-        $putEnabled = (floor($record['methods'] / 8) * 2 != $record['methods'] / 4);
-        $deleteEnabled = (floor($record['methods'] / 16) * 2 != $record['methods'] / 8);
-        $patchEnabled = (floor($record['methods'] / 32) * 2 != $record['methods'] / 16);
+        $getEnabled = (floor((int)$record['methods'] / 2) * 2 != floor((int)$record['methods']));
+        $postEnabled = (floor((int)$record['methods'] / 4) * 2 != floor((int)$record['methods'] / 2));
+        $putEnabled = (floor((int)$record['methods'] / 8) * 2 != floor((int)$record['methods'] / 4));
+        $deleteEnabled = (floor((int)$record['methods'] / 16) * 2 != floor((int)$record['methods'] / 8));
+        $patchEnabled = (floor((int)$record['methods'] / 32) * 2 != floor((int)$record['methods'] / 16));
         $matcher = new Matcher($getEnabled, $postEnabled, $putEnabled, $deleteEnabled, $patchEnabled, $record['path']);
         $authorizer = new NoneAuthorizer();
         $responder = new Responder($record['statusCode'], $record['header'], $record['body']);
@@ -104,7 +106,7 @@ class StubMapper implements StubRepository
     {
         $sql0 = "SELECT * FROM stub WHERE stubId = :stubId";
         $stt0 = $this->pdo->prepare($sql0);
-        $stt0->execute([':stubId' => $stubId->getValue()]);
+        $stt0->execute([':stubId' => $stubId->toInt()]);
         $res0 = $stt0->fetch(\PDO::FETCH_ASSOC);
         if ($res0) {
             return $this->fromRecord($res0);
@@ -115,9 +117,9 @@ class StubMapper implements StubRepository
 
     public function searchByOwner(UserId $ownerId): StubList
     {
-        $sql0 = "SELECT * FROM stub "
-              . "WHERE ownerId = :ownerId "
-              . "ORDER BY ord";
+        $sql0 = "SELECT s.* FROM stub s JOIN stubOrdering o ON s.stubId = o.stubId "
+              . "WHERE s.ownerId = :ownerId "
+              . "ORDER BY o.ord";
         $stt0 = $this->pdo->prepare($sql0);
         $stt0->execute([':ownerId' => $ownerId->getValue()]);
         $stubs = [];
@@ -130,15 +132,15 @@ class StubMapper implements StubRepository
 
     public function storeOrdering(StubList $stubList): void
     {
+        $ownerId = \App::getCurrentUser();
+        $sql0 = "DELETE FROM stubOrdering WHERE ownerId = :ownerId";
+        $stt0 = $this->pdo->prepare($sql0)
+                          ->execute([':ownerId' => $ownerId->getValue()]);
+        
         if (! count($stubList)) {
             // no items.
             return;
         }
-
-        $ownerId = $stubList[0]->getStubId();
-        $sql0 = "DELETE FROM stubOrdering WHERE ownerId = :ownerId";
-        $stt0 = $this->pdo->prepare($sql0)
-                          ->execute([':ownerId' => $ownerId->getValue()]);
         
         $sql1 = "INSERT INTO stubOrdering VALUES (:ownerId, :ord, :stubId)";
         $stt1 = $this->pdo->prepare($sql1);
@@ -146,7 +148,7 @@ class StubMapper implements StubRepository
         foreach ($stubList as $stub) {
             $stt1->execute([':ownerId' => $ownerId->getValue(), 
                             ':ord' => $ord++, 
-                            ':stubId' => $stub->getStubId()->getValue()]);
+                            ':stubId' => $stub->getStubId()->toInt()]);
         }
     }
 

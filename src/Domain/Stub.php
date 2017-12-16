@@ -44,7 +44,7 @@ class Stub
     {
         $stubId = $reserveId();
         $ownerId = \App::getCurrentUser();
-        $matcher = new Matcher(true, false, false, false, false, '/stub'.$stubId->getValue());
+        $matcher = new Matcher(true, false, false, false, false, '/stub'.$stubId);
         $authorizer = new NoneAuthorizer();
         $responder = new Responder(200, '', 'Here QUICKSTUB is!');
         return new Stub($stubId, $ownerId, $matcher, $authorizer, $responder);

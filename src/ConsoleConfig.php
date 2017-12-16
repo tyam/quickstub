@@ -22,9 +22,21 @@ class ConsoleConfig extends ContainerConfig
         // 当ソフト固有のRouteオブジェクトをルータにインジェクト
         $di->setters['Aura\Router\RouterContainer']['setRouteFactory'] = $di->newFactory('tyam\radarx\Route');
         $di->params['tyam\radarx\Route'][0] = 'Web';
+
+        // fadocコンバータをサービス化
+        $di->set('fadoc', $di->lazyNew('tyam\fadoc\Converter'));
+
+        // radarx\Inputにfadocコンバータをインジェクト
+        $di->params['tyam\radarx\Input'][0] = $di->lazyGet('fadoc');
         
         // RunDomainトレイトのレゾルバをインジェクト
         $di->setters['tyam\radarx\RunDomain']['setResolve'] = $di->lazyNew('Aura\Di\ResolutionHelper');
+
+        // bambooのセットアップ
+        $di->params['tyam\bamboo\Engine'][0] = [__DIR__.'/Web/templates'];
+
+        // AbstractResponderのセットアップ
+        $di->params['Web\AbstractResponder'][1] = $di->lazyGet('session');
     }
     
     public function modify(Container $di)
@@ -41,7 +53,7 @@ class ConsoleConfig extends ContainerConfig
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
         $adr->middle('Radar\Adr\Handler\ActionHandler');
 
-        $adr->input('Web\ConsoleInput');
+        $adr->input('Web\Input');
 
         // ルートの設定
         //---------------------------------------
@@ -50,10 +62,10 @@ class ConsoleConfig extends ContainerConfig
         $adr->post(  'StubInit',      $base,                  'Link\StubInit');
         $adr->put(   'StubOrdering',  $base,                  'Link\StubOrdering');
         $adr->post(  'StubEntry',     $base.'/new',           'Link\StubEntry');
-        $adr->get(   'StubRef',       $base.'/{stub}',        'Link\StubRef');
-        $adr->put(   'StubUpdate',    $base.'/{stub}',        'Link\StubUpdate');
-        $adr->delete('StubRemoval',   $base.'/{stub}',        'Link\StubRemoval');
+        $adr->get(   'StubRef',       $base.'/{stubId}',      'Link\StubRef');
+        $adr->patch( 'StubUpdate',    $base.'/{stubId}',      'Link\StubUpdate');
+        $adr->delete('StubRemoval',   $base.'/{stubId}',      'Link\StubRemoval');
         $adr->get(   'AccessRef',     $base.'/access',        'Link\AccessRef');
-        $adr->get(   'StubAccessRef', $base.'/{stub}/access', 'Link\StubAccessRef');
+        $adr->get(   'StubAccessRef', $base.'/{stubId}/access',    'Link\StubAccessRef');
     }
 }

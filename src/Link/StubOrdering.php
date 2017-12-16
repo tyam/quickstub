@@ -7,8 +7,7 @@ use Domain\Stub;
 use Domain\StubList;
 use Domain\StubRepository;
 use tyam\fadoc\Converter;
-use Aura\Payload\Payload;
-use Aura\Payload_Interface\PayloadStatus;
+use tyam\radarx\PayloadFactory;
 
 class StubOrdering
 {
@@ -21,29 +20,29 @@ class StubOrdering
         $this->converter = $converter;
     }
 
-    public function __invoke($form)
+    public function __invoke($form, $payloadFactory)
     {
         $userId = \App::getCurrentUser();
         if (is_null($userId)) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_AUTHENTICATED);
+            return $payloadFactory->notAuthenticated();
         }
         $stubList = $this->stubRepo->searchByOwner($userId);
 
         $cd = $this->converter->objectize([$stubList, 'moveItem'], $form);
         if (! $cd()) {
-            $payload = new Payload();
-            $payload->setStatus(PayloadStatus::NOT_VALID);
-            $payload->setOutput(['errors' => $cd->describe(), 'form' => $form]);
-            return $payload;
+            return $payloadFactory->notValid($stubList, $cd->describe());
         }
 
-        $args = $cd->get();
-        $result = call_user_func_array([$stubList, 'moveItem'], $args);
+        list($stubId, $index) = $cd->get();
+        $result = $stubList->moveItem($stubId, $index);
         if (! $result) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_UPDATED);
+            // 指定されたスタブIDがリスト内に無い、または指定された添字が範囲外。
+            // どちらの場合も、操作の最中にリストが変更されたと考えられるので、
+            // 再試行すべき。
+            return $payloadFactory->failure($stubList, ['reason' => 'unspecified']);
         }
 
         $this->stubRepo->storeOrdering($stubList);
-        return (new Payload())->setStatus(PayloadStatus::SUCCESS);
+        return $payloadFactory->success($stubList, null);
     }
 }

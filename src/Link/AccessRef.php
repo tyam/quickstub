@@ -4,8 +4,7 @@ namespace Link;
 
 use Domain\Access;
 use Domain\AccessRepository;
-use Aura\Payload\Payload;
-use Aura\Payload_Interface\PayloadStatus;
+use tyam\radarx\PayloadFactory;
 
 class AccessRef
 {
@@ -16,15 +15,14 @@ class AccessRef
         $this->accessRepo = $accessRepo;
     }
 
-    public function __invoke()
+    public function __invoke($_form, $payloadFactory)
     {
         $userId = \App::getCurrentUser();
         if (is_null($userId)) {
-            return (new Payload())->setStatus(PayloadStatus::NOT_AUTHENTICATED);
+            return $payloadFactory->notAuthenticated();
         }
 
         $accessList = $this->accessRepo->searchByUser($userId);
-
-        return (new Payload())->setStatus(PayloadStatus::FOUND)->setOutput($accessList);
+        return $payloadFactory->success(null, $accessList);
     }
 }

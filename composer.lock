@@ -728,12 +728,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tyam/bamboo.git",
-                "reference": "0e7757c1f1915a2baf36e5d54023efad924d03fd"
+                "reference": "145bb9e73a43a1e01ab61a7115facb457ae4bcf2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tyam/bamboo/zipball/0e7757c1f1915a2baf36e5d54023efad924d03fd",
-                "reference": "0e7757c1f1915a2baf36e5d54023efad924d03fd",
+                "url": "https://api.github.com/repos/tyam/bamboo/zipball/145bb9e73a43a1e01ab61a7115facb457ae4bcf2",
+                "reference": "145bb9e73a43a1e01ab61a7115facb457ae4bcf2",
                 "shasum": ""
             },
             "require-dev": {
@@ -770,7 +770,7 @@
                 "source": "https://github.com/tyam/bamboo/tree/master",
                 "issues": "https://github.com/tyam/bamboo/issues"
             },
-            "time": "2017-10-13 15:24:40"
+            "time": "2017-12-06 12:58:54"
         },
         {
             "name": "tyam/condition",
@@ -866,12 +866,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tyam/fadoc.git",
-                "reference": "95322fc6a62f98e37757a37e173e221d9e11b876"
+                "reference": "161266a99178d79b5cb23e3cbbea612a9f4c2149"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tyam/fadoc/zipball/95322fc6a62f98e37757a37e173e221d9e11b876",
-                "reference": "95322fc6a62f98e37757a37e173e221d9e11b876",
+                "url": "https://api.github.com/repos/tyam/fadoc/zipball/161266a99178d79b5cb23e3cbbea612a9f4c2149",
+                "reference": "161266a99178d79b5cb23e3cbbea612a9f4c2149",
                 "shasum": ""
             },
             "require": {
@@ -901,7 +901,7 @@
                 "source": "https://github.com/tyam/fadoc/tree/master",
                 "issues": "https://github.com/tyam/fadoc/issues"
             },
-            "time": "2017-09-08 13:25:25"
+            "time": "2017-12-16 00:44:23"
         },
         {
             "name": "tyam/radarx",
@@ -909,18 +909,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tyam/radarx.git",
-                "reference": "105190ec3a1403da1a7702c91313af3c9f9ef406"
+                "reference": "5d45e166925438034e9bbb2d6c9806f0e88fb9e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tyam/radarx/zipball/105190ec3a1403da1a7702c91313af3c9f9ef406",
-                "reference": "105190ec3a1403da1a7702c91313af3c9f9ef406",
+                "url": "https://api.github.com/repos/tyam/radarx/zipball/5d45e166925438034e9bbb2d6c9806f0e88fb9e2",
+                "reference": "5d45e166925438034e9bbb2d6c9806f0e88fb9e2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
                 "psr/log": "~1.0",
-                "radar/adr": "~1.0"
+                "radar/adr": "~1.0",
+                "tyam/fadoc": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -943,7 +944,7 @@
                 "source": "https://github.com/tyam/radarx/tree/master",
                 "issues": "https://github.com/tyam/radarx/issues"
             },
-            "time": "2017-12-01 13:00:00"
+            "time": "2017-12-14 13:14:34"
         },
         {
             "name": "zendframework/zend-diactoros",
@@ -1561,16 +1562,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "5.2.4",
+            "version": "5.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "033ec97498cf530cc1be4199264cad568b19be26"
+                "reference": "661f34d0bd3f1a7225ef491a70a020ad23a057a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/033ec97498cf530cc1be4199264cad568b19be26",
-                "reference": "033ec97498cf530cc1be4199264cad568b19be26",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/661f34d0bd3f1a7225ef491a70a020ad23a057a1",
+                "reference": "661f34d0bd3f1a7225ef491a70a020ad23a057a1",
                 "shasum": ""
             },
             "require": {
@@ -1586,7 +1587,6 @@
                 "theseer/tokenizer": "^1.1"
             },
             "require-dev": {
-                "ext-xdebug": "^2.5",
                 "phpunit/phpunit": "^6.0"
             },
             "suggest": {
@@ -1595,7 +1595,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.2.x-dev"
+                    "dev-master": "5.3.x-dev"
                 }
             },
             "autoload": {
@@ -1610,7 +1610,7 @@
             "authors": [
                 {
                     "name": "Sebastian Bergmann",
-                    "email": "sb@sebastian-bergmann.de",
+                    "email": "sebastian@phpunit.de",
                     "role": "lead"
                 }
             ],
@@ -1621,7 +1621,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-11-27 09:00:30"
+            "time": "2017-12-06 09:29:45"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1811,16 +1811,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "6.5.1",
+            "version": "6.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "8eea3cfbfe3c8363f8111e24569bdb6ead71ea6e"
+                "reference": "1b2f933d5775f9237369deaa2d2bfbf9d652be4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/8eea3cfbfe3c8363f8111e24569bdb6ead71ea6e",
-                "reference": "8eea3cfbfe3c8363f8111e24569bdb6ead71ea6e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/1b2f933d5775f9237369deaa2d2bfbf9d652be4c",
+                "reference": "1b2f933d5775f9237369deaa2d2bfbf9d652be4c",
                 "shasum": ""
             },
             "require": {
@@ -1834,11 +1834,11 @@
                 "phar-io/version": "^1.0",
                 "php": "^7.0",
                 "phpspec/prophecy": "^1.7",
-                "phpunit/php-code-coverage": "^5.2.3",
+                "phpunit/php-code-coverage": "^5.3",
                 "phpunit/php-file-iterator": "^1.4.3",
                 "phpunit/php-text-template": "^1.2.1",
                 "phpunit/php-timer": "^1.0.9",
-                "phpunit/phpunit-mock-objects": "^5.0",
+                "phpunit/phpunit-mock-objects": "^5.0.5",
                 "sebastian/comparator": "^2.1",
                 "sebastian/diff": "^2.0",
                 "sebastian/environment": "^3.1",
@@ -1891,27 +1891,27 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2017-12-01 09:57:23"
+            "time": "2017-12-10 08:06:19"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "5.0.2",
+            "version": "5.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "b09519fb0786d369c0ae6b00c9caf25f7292b393"
+                "reference": "283b9f4f670e3a6fd6c4ff95c51a952eb5c75933"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/b09519fb0786d369c0ae6b00c9caf25f7292b393",
-                "reference": "b09519fb0786d369c0ae6b00c9caf25f7292b393",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/283b9f4f670e3a6fd6c4ff95c51a952eb5c75933",
+                "reference": "283b9f4f670e3a6fd6c4ff95c51a952eb5c75933",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.5",
                 "php": "^7.0",
                 "phpunit/php-text-template": "^1.2.1",
-                "sebastian/exporter": "^3.0"
+                "sebastian/exporter": "^3.1"
             },
             "conflict": {
                 "phpunit/phpunit": "<6.0"
@@ -1950,7 +1950,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2017-12-01 09:50:16"
+            "time": "2017-12-10 08:01:53"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
