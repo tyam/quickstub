@@ -44,10 +44,5 @@
         "psr-4": {
             "tests\\": "tests/"
         }
-    }, 
-    "config": {
-        "github-oauth": {
-            "github.com": "2eaf78246b43fd9dd9750a04236c92a6149b3317"
-        }
     }
 }
