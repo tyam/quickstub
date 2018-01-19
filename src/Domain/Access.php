@@ -56,7 +56,7 @@ class Access
         return $this->response;
     }
 
-    public function getAccessed(): \Datetime
+    public function getAccessed(): Datetime
     {
         return $this->accessed;
     }
@@ -67,9 +67,11 @@ class Access
      * @param AccessEvent $ev
      * @return Access
      */
-    public static function createFromEvent(AccessEvent $ev): Access
+    public static function createFromEvent($generateId, AccessEvent $ev): Access
     {
-        return new Access($ev->getStub()->getStubId(), 
+        $accessId = $generateId();
+        return new Access($accessId, 
+                          $ev->getStub()->getStubId(), 
                           $ev->getStub()->getOwnerId(), 
                           $ev->getRequest(), 
                           $ev->getResponse(), 

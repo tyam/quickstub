@@ -13,7 +13,7 @@ class StubRefResponder extends AbstractResponder
 {
     public function provideVariables(string $template): array
     {
-        return ['feedback' => $this->session->getFeedback()];
+        return ['feedback' => $this->session->getFeedback()] + parent::provideVariables($template);
     }
 
     public function getForm($payload) 

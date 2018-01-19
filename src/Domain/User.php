@@ -35,7 +35,7 @@ class User
     {
         $user = new User($generateId(), $displayName);
         if ($doLogin) {
-            App::setCurrentUser($user->getUserId());
+            \Session::setCurrentUser($user->getUserId());
         }
         return $user;
     }

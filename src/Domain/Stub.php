@@ -43,7 +43,7 @@ class Stub
     public static function create(Callable $reserveId)
     {
         $stubId = $reserveId();
-        $ownerId = \App::getCurrentUser();
+        $ownerId = \Session::getCurrentUser();
         $matcher = new Matcher(true, false, false, false, false, '/stub'.$stubId);
         $authorizer = new NoneAuthorizer();
         $responder = new Responder(200, '', 'Here QUICKSTUB is!');
@@ -57,7 +57,7 @@ class Stub
      * - スタブが実行された -> Responderによるレスポンス
      * @return maybe(Response); 
      */
-    public function execute(Request $request, Response $response)
+    public function execute(Request $request, Response $response, Responder $response403)
     {
         $result = $this->matcher->match($request);
         if ($result === false) {
@@ -66,7 +66,7 @@ class Stub
         $vars = $result;
 
         if (! $this->authorizer->authorize($request)) {
-            return $response->withStatusCode(403);
+            return $responder403->respond($responder, []);
         }
 
         return $this->responder->respond($response, $vars);

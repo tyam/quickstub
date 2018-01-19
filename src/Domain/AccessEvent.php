@@ -29,7 +29,7 @@ class AccessEvent
         if (is_null($accessed)) {
             $accessed = new Datetime();
         }
-        $this->when = $when;
+        $this->accessed = $accessed;
     }
 
     public function getRequest(): Request

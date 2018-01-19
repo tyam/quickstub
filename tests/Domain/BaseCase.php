@@ -3,7 +3,7 @@
 namespace tests\Domain;
 
 use PHPUnit\Framework\TestCase;
-use Domain\App;
+use tyam\radarx\ServiceLocator;
 use Domain\UserId;
 
 class FakeSession implements \Domain\Session
@@ -43,7 +43,7 @@ class BaseCase extends TestCase
     
     public function setUp()
     {
-        if (! App::hasSingleton()) {
+        if (! class_exists('Logger')) {
             $this->initApp();
         }
     }
@@ -51,9 +51,10 @@ class BaseCase extends TestCase
     {
         $logger = new \Monolog\Logger('myapp');
         $logger->pushHandler(new \Monolog\Handler\StreamHandler('php://stdout', \Monolog\Logger::DEBUG));
+        new class('Logger', $logger) extends ServiceLocator {};
         $dispatcher = new \tyam\edicue\Dispatcher();
+        new class('Dispatcher', $dispatcher) extends ServiceLocator {};
         $session = new FakeSession();
-        new App($logger, $dispatcher, $session);
-        class_alias('Domain\App', 'App');
+        new class('Session', $session) extends ServiceLocator {};
     }
 }

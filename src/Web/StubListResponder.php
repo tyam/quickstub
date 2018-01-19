@@ -10,6 +10,11 @@ use Domain\User;
 
 class StubListResponder extends AbstractResponder
 {
+    public function provideVariables(string $template): array
+    {
+        return ['feedback' => $this->session->getFeedback()] + parent::provideVariables($template);
+    }
+    
     public function __invoke(Request $request, Response $response, PayloadInterface $payload = null)
     {
         $output = $response->getBody();

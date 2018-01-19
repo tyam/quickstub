@@ -8,6 +8,7 @@ use Domain\UserId;
 use Domain\Matcher;
 use Domain\NoneAuthorizer;
 use Domain\Responder;
+use Domain\StubList;
 use tyam\condition\Condition;
 use Psr\Http\Message\ResponseInterface as IResponse;
 use Zend\Diactoros\ServerRequestFactory;
@@ -18,7 +19,7 @@ class StubTest extends BaseCase
     public function setUp()
     {
         parent::setUp();
-        \App::setCurrentUser(new UserId(5));
+        \Session::setCurrentUser(new UserId(5));
     }
 
     public function createGenerator(int $i)
@@ -67,12 +68,12 @@ class StubTest extends BaseCase
         $r = new Responder(200, 'X-HEADER: xyz', 'fine, {id}');
         $stub->modify($m, $a, $r);
 
-        $result = $stub->execute($this->mockRequest('GET', '/item/3'), new Response());
+        $result = $stub->execute($this->mockRequest('GET', '/item/3'), new Response(), StubList::createDefaultResponder403());
         $this->assertEquals($result->getStatusCode(), 200);
         $this->assertEquals($result->getHeader('X-HEADER'), ['xyz']);
         $this->assertEquals($result->getBody().'', 'fine, 3');
 
-        $result = $stub->execute($this->mockRequest('GET', '/item/3/x'), new Response());
+        $result = $stub->execute($this->mockRequest('GET', '/item/3/x'), new Response(), StubList::createDefaultResponder403());
         $this->assertNull($result);
     }
 }

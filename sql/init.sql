@@ -66,7 +66,7 @@ CREATE TABLE user (
     displayName VARCHAR(50) NOT NULL, 
     created DATETIME NOT NULL
 );
-INSERT INTO sequence VALUES ('userId', 121, 1);
+INSERT INTO sequence VALUES ('userId', 122, 1);
 INSERT INTO user VALUES (nextval('userId'), '新規ユーザー', NOW());
 
 CREATE TABLE stub (

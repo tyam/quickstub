@@ -11,6 +11,7 @@ use Aura\Di\ContainerConfig;
 use Monolog\Logger;
 use Monolog\Handler\SyslogHandler;
 use Monolog\Handler\StreamHandler;
+use tyam\radarx\ServiceLocator;
 
 class Config extends ContainerConfig
 {
@@ -18,33 +19,31 @@ class Config extends ContainerConfig
 
     public function define(Container $di)
     {
-        // アプリケーションのインフラ部分
+        // 各種サービス
         // ---------------------------------------------------------
-        // App
-        $di->params['Domain\App'][0] = $di->lazyGet('logger');
-        $di->params['Domain\App'][1] = $di->lazyNew('tyam\edicue\Dispatcher');
-        $di->params['Domain\App'][2] = $di->lazyGet('session');
 
         // Logger
         $di->set('logger', $di->lazyNew('Monolog\Logger'));
         $di->params['Monolog\Logger'][0] = self::APP_NAME;
 
         // Session
-        $di->set('session', $di->lazyNew('Store\PhpSession'));
+        $di->set('session', $di->lazyNew('Infra\PhpSession'));
 
         // Dispatcher
+        $di->set('dispatcher', $di->lazyNew('tyam\edicue\Dispatcher'));
         $di->params['Aura\Di\ResolutionHelper']['container'] = $di;
         $di->params['tyam\edicue\Dispatcher'][0] = $di->lazyNew('Aura\Di\ResolutionHelper');
         $di->params['tyam\edicue\Dispatcher'][1] = null;
         $di->params['tyam\edicue\Dispatcher'][2] = [
             // ここにリスナを登録していく。
+            'Domain\AccessEvent' => ['App\AccessEntry']
         ];
         
         // レポジトリ（インターフェイス）とマッパ（実装）の関連付け
         // ---------------------------------------------------------
-        $di->types['Domain\UserRepository'] = $di->lazyNew('Store\UserMapper');
-        $di->types['Domain\StubRepository'] = $di->lazyNew('Store\StubMapper');
-        $di->types['Domain\AccessRepository'] = $di->lazyNew('Store\AccessMapper');
+        $di->types['Domain\UserRepository'] = $di->lazyNew('Infra\UserMapper');
+        $di->types['Domain\StubRepository'] = $di->lazyNew('Infra\StubMapper');
+        $di->types['Domain\AccessRepository'] = $di->lazyNew('Infra\AccessMapper');
 
         // データベースの設定
         // ---------------------------------------------------------
@@ -62,8 +61,15 @@ class Config extends ContainerConfig
         $logger = $di->get('logger');
         $logger->pushHandler(new StreamHandler('php://stdout', Logger::DEBUG));
 
-        // Appのシングルトンインスタンスの生成
-        $di->newInstance('Domain\App');
-        class_alias('Domain\App', 'App');
+        // PDOのセットアップ
+        $pdo = $di->get('db');
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+
+        //phpinfo();exit;
+
+        // サービスロケータの設定
+        new class('Session', $di->get('session')) extends ServiceLocator {};
+        new class('Logger', $di->get('logger')) extends ServiceLocator {};
+        new class('Dispatcher', $di->get('dispatcher')) extends ServiceLocator {};
     }
 }

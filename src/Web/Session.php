@@ -8,7 +8,9 @@
 
 namespace Web;
 
-interface Session extends \Domain\Session
+use tyam\radarx\CsrfTokenHolder;
+
+interface Session extends \Domain\Session, CsrfTokenHolder 
 {
     /**
      * フィードバック識別子をセットする。

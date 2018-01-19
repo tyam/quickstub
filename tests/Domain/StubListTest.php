@@ -19,7 +19,7 @@ class StubListTest extends BaseCase
     public function setUp()
     {
         parent::setUp();
-        \App::setCurrentUser(new UserId(5));
+        \Session::setCurrentUser(new UserId(5));
     }
 
     private function createGenerator(int $i)
@@ -34,7 +34,7 @@ class StubListTest extends BaseCase
         $getEnabled = ($method == 'GET');
         $postEnabled = ($method == 'POST');
         return new Stub(StubId::fromInt($id), 
-                        \App::getCurrentUser(), 
+                        \Session::getCurrentUser(), 
                         new Matcher($getEnabled, $postEnabled, false, false, false, $path), 
                         new NoneAuthorizer(), 
                         new Responder($statusCode, 'X-HEADER: abc', $body));

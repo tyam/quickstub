@@ -13,11 +13,13 @@ namespace Domain;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use tyam\condition\Condition;
+use DateTimeImmutable as Datetime;
 
 class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
 {
     private $stubs;
     private $responder404;
+    private $responder403;
 
     /**
      * デフォルトの404レスポンダを作る。
@@ -27,8 +29,16 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
     public static function createDefaultResponder404(): Responder
     {
         $headers = 'Content-Type: text/html';
-        $body = '<html><body>Try <a href="'.\getEnv('USER_PATH').'">here</a></body></html>';
+        $body = '<html><body><h1>404 Not Found</h1><p>Try <a href="'.\getEnv('USER_PATH').'">here</a></p></body></html>';
         $responder = new Responder(404, $headers, $body);
+        return $responder;
+    }
+
+    public static function createDefaultResponder403(): Responder
+    {
+        $headers = 'Content-Type: text/html';
+        $body = '<html><body><h1>403 Not Authorized</h1><p>Try <a href="'.\getEnv('USER_PATH').'">here</a></p></body></html>';
+        $responder = new Responder(403, $headers, $body);
         return $responder;
     }
 
@@ -36,13 +46,17 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
      * `responder404`は、HTTPリクエストにマッチするスタブが無かった場合のレスポンスを
      * 作成するレンポンダ。これにnullが与えられた場合はデフォルトのレスポンダが使われる。
      */
-    public function __construct(array $stubs, Responder $responder404 = null)
+    public function __construct(array $stubs, Responder $responder404 = null, Responder $responder403 = null)
     {
         $this->stubs = $stubs;
         if (is_null($responder404)) {
             $responder404 = self::createDefaultResponder404();
         }
+        if (is_null($responder403)) {
+            $responder403 = self::createDefaultResponder403();
+        }
         $this->responder404 = $responder404;
+        $this->responder403 = $responder403;
     }
 
     public function getResponder404(): Responder
@@ -53,6 +67,16 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
     public function setResponder404(Responder $responder404): void
     {
         $this->responder404 = $responder404;
+    }
+
+    public function getResponder403(): Responder
+    {
+        return $this->responder403;
+    }
+
+    public function setResponder403(Responder $responder403): void
+    {
+        $this->responder403 = $responder403;
     }
 
     /**
@@ -105,8 +129,9 @@ class StubList implements \IteratorAggregate, \ArrayAccess, \Countable
     public function execute(Request $request, Response $response)
     {
         foreach ($this->stubs as $stub) {
-            $result = $stub->execute($request, $response);
+            $result = $stub->execute($request, $response, $this->responder403);
             if (! is_null($result)) {
+                \Dispatcher::getInstance()(new AccessEvent($request, $stub, $result, new Datetime()));
                 return $result;
             }
         }

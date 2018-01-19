@@ -27,6 +27,6 @@ class UserTest extends BaseCase
         $user = User::register([$this, 'generateId'], 'My Name', true);
         $this->assertEquals($user->getUserId()->getValue(), 2);
         $this->assertEquals($user->getDisplayName(), 'My Name');
-        $this->assertEquals($user->getUserId(), \App::getCurrentUser());
+        $this->assertEquals($user->getUserId(), \Session::getCurrentUser());
     }
 }

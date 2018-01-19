@@ -14,6 +14,7 @@ use Relay\Middleware\ResponseSender;
 use Relay\Middleware\SessionHeadersHandler;
 use Relay\Middleware\JsonContentHandler;
 use Zend\Diactoros\Response as Response;
+use tyam\radarx\CsrfTokenHandler;
 
 class ConsoleConfig extends ContainerConfig
 {
@@ -49,23 +50,23 @@ class ConsoleConfig extends ContainerConfig
         $adr->middle(new SessionHeadersHandler());
         $adr->middle(new JsonContentHandler());
         $adr->middle(new ExceptionHandler(new Response()));
+        $adr->middle(new CsrfTokenHandler($di->get('session')));
         $adr->middle('tyam\radarx\XMethodHandler');
         $adr->middle('Radar\Adr\Handler\RoutingHandler');
         $adr->middle('Radar\Adr\Handler\ActionHandler');
 
-        $adr->input('Web\Input');
+        $adr->input('tyam\radarx\Input');
 
         // ルートの設定
         //---------------------------------------
         $base = '/' . getEnv('USER_PATH');
-        $adr->get(   'StubList',      $base,                  'Link\StubList');
-        $adr->post(  'StubInit',      $base,                  'Link\StubInit');
-        $adr->put(   'StubOrdering',  $base,                  'Link\StubOrdering');
-        $adr->post(  'StubEntry',     $base.'/new',           'Link\StubEntry');
-        $adr->get(   'StubRef',       $base.'/{stubId}',      'Link\StubRef');
-        $adr->patch( 'StubUpdate',    $base.'/{stubId}',      'Link\StubUpdate');
-        $adr->delete('StubRemoval',   $base.'/{stubId}',      'Link\StubRemoval');
-        $adr->get(   'AccessRef',     $base.'/access',        'Link\AccessRef');
-        $adr->get(   'StubAccessRef', $base.'/{stubId}/access',    'Link\StubAccessRef');
+        $adr->get(   'StubList',      $base,                  'App\StubList');
+        $adr->put(   'StubOrdering',  $base,                  'App\StubOrdering');
+        $adr->post(  'StubEntry',     $base.'/new',           'App\StubEntry');
+        $adr->get(   'AccessRef',     $base.'/accesses',        'App\AccessRef');
+        $adr->get(   'StubAccessRef', $base.'/{stubId}/accesses',    'App\AccessStubRef');
+        $adr->get(   'StubRef',       $base.'/{stubId}',      'App\StubRef');
+        $adr->patch( 'StubUpdate',    $base.'/{stubId}',      'App\StubUpdate');
+        $adr->delete('StubRemoval',   $base.'/{stubId}',      'App\StubRemoval');
     }
 }

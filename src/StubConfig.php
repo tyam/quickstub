@@ -32,7 +32,7 @@ class StubConfig extends ContainerConfig
         $adr->middle('Radar\Adr\Handler\ActionHandler');
 
         // ルートは、すべてStubExecが実行されるように設定
-        $adr->route('StubExec', '/', 'Link\StubExec')->wildcard('x')
+        $adr->route('StubExec', '/', 'App\StubExec')->wildcard('x')
             ->allows(['GET', 'PUT', 'POST', 'DELETE', 'PATCH']);
     }
 }

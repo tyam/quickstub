@@ -1,0 +1,32 @@
+version: '2'
+services:
+  web:
+    image: myphp:7.1
+    volumes:
+      - ./:/var/www/html/
+      - ./conf/sites-available:/etc/apache2/sites-available
+      - ./conf/php:/usr/local/etc/php
+    container_name: quickstub-web
+    ports:
+      - "80:80"
+      - "443:443"
+    links: 
+      - mysql
+  data:
+    image: busybox
+    volumes: 
+      - ./mysql-data:/var/lib/mysql
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: quickstub
+      MYSQL_USER: quickstub
+      MYSQL_PASSWORD: 12345
+    ports:
+      - "13306:13306"
+    volumes_from: 
+      - data
+    volumes: 
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/initial.sql
+    container_name: quickstub-db

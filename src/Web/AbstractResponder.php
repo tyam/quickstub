@@ -30,6 +30,6 @@ class AbstractResponder implements VariableProvider
 
     public function provideVariables(string $template): array
     {
-        return [];
+        return ['_csrf_token' => $this->session->getCsrfToken()];
     }
 }
