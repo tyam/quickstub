@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8269a2986340902d705a5c7aafe2aa18",
-    "content-hash": "7c61ddf9d1c8ba207df35b443af20b29",
+    "hash": "888c90a252d996adea7d72d4c693ef5b",
+    "content-hash": "d0897dd3aef3d6b8a8bd119ec5957b12",
     "packages": [
         {
             "name": "arbiter/arbiter",
@@ -724,20 +724,22 @@
         },
         {
             "name": "tyam/bamboo",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tyam/bamboo.git",
-                "reference": "145bb9e73a43a1e01ab61a7115facb457ae4bcf2"
+                "reference": "ed0ad3033222760ce000f4a14a923b7d35a886f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tyam/bamboo/zipball/145bb9e73a43a1e01ab61a7115facb457ae4bcf2",
-                "reference": "145bb9e73a43a1e01ab61a7115facb457ae4bcf2",
+                "url": "https://api.github.com/repos/tyam/bamboo/zipball/ed0ad3033222760ce000f4a14a923b7d35a886f6",
+                "reference": "ed0ad3033222760ce000f4a14a923b7d35a886f6",
                 "shasum": ""
             },
+            "require": {
+                "php": "^7.0"
+            },
             "require-dev": {
-                "mockery/mockery": "*",
                 "phpunit/phpunit": "^6.0"
             },
             "type": "library",
@@ -746,11 +748,7 @@
                     "tyam\\bamboo\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -763,14 +761,10 @@
             "description": "PHP template engine, which has variables-pulling facility.",
             "homepage": "https://github.com/tyam/bamboo",
             "keywords": [
-                "PHP",
+                "php",
                 "template engine"
             ],
-            "support": {
-                "source": "https://github.com/tyam/bamboo/tree/master",
-                "issues": "https://github.com/tyam/bamboo/issues"
-            },
-            "time": "2017-12-06 12:58:54"
+            "time": "2018-01-24 14:19:22"
         },
         {
             "name": "tyam/condition",
@@ -862,19 +856,20 @@
         },
         {
             "name": "tyam/fadoc",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tyam/fadoc.git",
-                "reference": "240e43bd6dcfe09a264049addbb5a354ba77dd17"
+                "reference": "bacc301954e66d7a8d7ddc96068c9b8f8bd2b20f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tyam/fadoc/zipball/240e43bd6dcfe09a264049addbb5a354ba77dd17",
-                "reference": "240e43bd6dcfe09a264049addbb5a354ba77dd17",
+                "url": "https://api.github.com/repos/tyam/fadoc/zipball/bacc301954e66d7a8d7ddc96068c9b8f8bd2b20f",
+                "reference": "bacc301954e66d7a8d7ddc96068c9b8f8bd2b20f",
                 "shasum": ""
             },
             "require": {
+                "php": "^7.0",
                 "psr/log": "*",
                 "tyam/condition": "*"
             },
@@ -888,6 +883,7 @@
                     "tyam\\fadoc\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -898,12 +894,8 @@
                 }
             ],
             "description": "Form Array to Domain Object Converter/Validator",
-            "homepage": "https://github.com/tyam/condition",
-            "support": {
-                "source": "https://github.com/tyam/fadoc/tree/master",
-                "issues": "https://github.com/tyam/fadoc/issues"
-            },
-            "time": "2018-01-19 13:50:26"
+            "homepage": "https://github.com/tyam/fadoc",
+            "time": "2018-01-29 12:29:56"
         },
         {
             "name": "tyam/radarx",
@@ -911,19 +903,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tyam/radarx.git",
-                "reference": "be2a58e2165c960b83c5f088480f33d178ed8700"
+                "reference": "c746e73c72513b0baa5dfbc4978004f5bdde0998"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tyam/radarx/zipball/be2a58e2165c960b83c5f088480f33d178ed8700",
-                "reference": "be2a58e2165c960b83c5f088480f33d178ed8700",
+                "url": "https://api.github.com/repos/tyam/radarx/zipball/c746e73c72513b0baa5dfbc4978004f5bdde0998",
+                "reference": "c746e73c72513b0baa5dfbc4978004f5bdde0998",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.0.0",
                 "psr/log": "~1.0",
                 "radar/adr": "~1.0",
-                "tyam/fadoc": "dev-master"
+                "tyam/fadoc": "*"
             },
             "type": "library",
             "autoload": {
@@ -946,7 +938,7 @@
                 "source": "https://github.com/tyam/radarx/tree/master",
                 "issues": "https://github.com/tyam/radarx/issues"
             },
-            "time": "2018-01-19 13:12:47"
+            "time": "2018-01-29 12:59:59"
         },
         {
             "name": "zendframework/zend-diactoros",
@@ -1403,16 +1395,16 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "4.2.0",
+            "version": "4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "66465776cfc249844bde6d117abff1d22e06c2da"
+                "reference": "94fd0001232e47129dd3504189fa1c7225010d08"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/66465776cfc249844bde6d117abff1d22e06c2da",
-                "reference": "66465776cfc249844bde6d117abff1d22e06c2da",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/94fd0001232e47129dd3504189fa1c7225010d08",
+                "reference": "94fd0001232e47129dd3504189fa1c7225010d08",
                 "shasum": ""
             },
             "require": {
@@ -1450,7 +1442,7 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
-            "time": "2017-11-27 17:38:31"
+            "time": "2017-11-30 07:14:17"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -2607,15 +2599,13 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "tyam/fadoc": 20,
         "tyam/edicue": 20,
-        "tyam/bamboo": 20,
         "tyam/radarx": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=5.5.0"
+        "php": "~7.0"
     },
     "platform-dev": []
 }

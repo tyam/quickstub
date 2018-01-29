@@ -1,14 +1,14 @@
 {
     "type": "project",
     "require": {
-        "php": ">=5.5.0",
+        "php": "~7.0",
         "radar/adr": "~1.0",
         "relay/middleware": "~1.0",
         "josegonzalez/dotenv": "~2.0",
         "zendframework/zend-diactoros": "~1.0", 
-        "tyam/fadoc": "dev-master", 
+        "tyam/fadoc": "*", 
         "tyam/edicue": "dev-master", 
-        "tyam/bamboo": "dev-master", 
+        "tyam/bamboo": "*", 
         "tyam/radarx": "dev-master", 
         "monolog/monolog": "*"
     },
@@ -20,15 +20,7 @@
     "repositories": [
         {
             "type": "vcs", 
-            "url": "https://github.com/tyam/fadoc"
-        }, 
-        {
-            "type": "vcs", 
             "url": "https://github.com/tyam/edicue"
-        }, 
-        {
-            "type": "vcs", 
-            "url": "https://github.com/tyam/bamboo"
         }, 
         {
             "type": "vcs", 
